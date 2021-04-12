@@ -1,0 +1,29 @@
+{
+    "name": "m3di/luna",
+    "description": "laravel admin panel",
+    "authors": [
+        {
+            "name": "mehdi",
+            "email": "mohamad-mehdi@live.com"
+        }
+    ],
+    "require": {
+        "haydenpierce/class-finder": "^0.4.3",
+        "tightenco/ziggy": "^0.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Luna\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Luna\\LunaServiceProvider"
+            ],
+            "aliases": {
+                "Luna": "Luna\\Facades\\Luna"
+            }
+        }
+    }
+}
