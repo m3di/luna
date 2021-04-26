@@ -141,6 +141,7 @@ class LunaController extends BaseController
 
         $fields = $resource->visibleFieldsOnCreate();
         $model = new $resource->model();
+        $resource->fireCreating($request, $model);
 
         $afterSaveJobs = [];
         $appendJob = function (\Closure $job) use (&$afterSaveJobs) {
@@ -156,6 +157,8 @@ class LunaController extends BaseController
         foreach ($afterSaveJobs as $job) {
             call_user_func_array($job, [$request, $model]);
         }
+
+        $resource->fireCreated($request, $model);
 
         return response()->json(true);
     }
@@ -205,6 +208,7 @@ class LunaController extends BaseController
         }
 
         $this->validate($request, $resource->getUpdateRules($model), $resource->getRulesMessages(), $resource->getRulesAttributes());
+        $resource->fireUpdating($request, $model);
 
         $fields = $resource->visibleFieldsOnEdit();
 
@@ -223,10 +227,12 @@ class LunaController extends BaseController
             call_user_func_array($job, [$request, $model]);
         }
 
+        $resource->fireUpdated($request, $model);
+
         return response()->json(true);
     }
 
-    function destroy($resource, $model)
+    function destroy(Request $request, $resource, $model)
     {
         /** @var Resource $resource */
         $resource = luna::getResource($resource);
@@ -241,7 +247,11 @@ class LunaController extends BaseController
             $this->authorize('delete', $model);
         }
 
-        return response()->json($model->delete());
+        $resource->fireDeleting($request, $model);
+        $result = $model->delete();
+        $resource->fireDeleted($request, $model);
+
+        return response()->json($result);
     }
 
     function typeAction(Request $request, $resource, $model, $type)

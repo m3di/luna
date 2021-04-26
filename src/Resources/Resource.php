@@ -4,14 +4,10 @@ namespace Luna\Resources;
 
 use Luna\Panels\PanelSimple;
 use Luna\Types\Type;
-use Models\Category;
 use Luna;
 use Luna\Actions\Action;
 use Luna\Metrics\Metric;
 use Luna\Panels\Panel;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
 abstract class Resource
 {
@@ -255,15 +251,12 @@ abstract class Resource
         return $export;
     }
 
-    /**
-     * @return Builder
-     */
     function getQuery()
     {
         return call_user_func([$this->model, 'query']);
     }
 
-    function authorize(Authenticatable $user)
+    function authorize($user)
     {
         return true;
     }
@@ -276,7 +269,7 @@ abstract class Resource
         }, []);
     }
 
-    function getUpdateRules(Model $model)
+    function getUpdateRules($model)
     {
         return array_reduce($this->visibleFieldsOnEdit(), function ($carry, Type $item) use ($model) {
             $carry = $carry + $item->getUpdateRules($model);
@@ -296,4 +289,43 @@ abstract class Resource
             return $carry;
         }, []);
     }
+
+    function fireCreating($request, $model) {
+        $this->creating($request, $model);
+        /** @todo: broadcast global event */
+    }
+
+    function fireCreated($request, $model) {
+        $this->created($request, $model);
+        /** @todo: broadcast global event */
+    }
+
+    function creating($request, $model) {}
+    function created($request, $model) {}
+
+    function fireUpdating($request, $model) {
+        $this->updating($request, $model);
+        /** @todo: broadcast global event */
+    }
+
+    function fireUpdated($request, $model) {
+        $this->updated($request, $model);
+        /** @todo: broadcast global event */
+    }
+
+    function updating($request, $model) {}
+    function updated($request, $model) {}
+
+    function fireDeleting($request, $model) {
+        $this->deleting($request, $model);
+        /** @todo: broadcast global event */
+    }
+
+    function fireDeleted($request, $model) {
+        $this->deleted($request, $model);
+        /** @todo: broadcast global event */
+    }
+
+    function deleting($request, $model) {}
+    function deleted($request, $model) {}
 }
