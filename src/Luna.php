@@ -3,7 +3,9 @@
 namespace Luna;
 
 
+use Luna\Exceptions\NotARegisterableResource;
 use Luna\Exceptions\ResourceNotRegisteredException;
+use Luna\Menu\MenuItem;
 use Luna\Resources\Resource;
 use Luna\Tools\Tool;
 use Illuminate\Foundation\Application;
@@ -14,6 +16,7 @@ class Luna
     protected $app;
     protected $resources = [];
     protected $tools = [];
+    protected $menu = [];
 
     public function __construct($app)
     {
@@ -31,11 +34,16 @@ class Luna
 
     function addResource($resource, $boot = true)
     {
-        $resource = new $resource();
-        $this->resources[(new \ReflectionClass($resource))->getShortName()] = $resource;
+        $resource = is_object($resource) ? $resource : (new $resource());
 
-        if ($boot) {
-            $resource->boot();
+        if ($resource instanceof Resource) {
+            $this->resources[(new \ReflectionClass($resource))->getShortName()] = $resource;
+
+            if ($boot) {
+                $resource->boot();
+            }
+        } else {
+            throw new NotARegisterableResource($resource);
         }
     }
 
@@ -91,6 +99,24 @@ class Luna
         return $this->tools[$name];
     }
 
+    function setMenu($menu)
+    {
+        $this->menu = [];
+
+        foreach ($menu as $item) {
+            $this->addMenu($item);
+        }
+    }
+
+    function addMenu(MenuItem $item, $index = null)
+    {
+        if (is_null($index)) {
+            $this->menu[] = $item;
+        } else {
+            $this->menu[$index] = $item;
+        }
+    }
+
     function exportResources()
     {
         $resources = [];
@@ -117,11 +143,23 @@ class Luna
         return $tools;
     }
 
+    function exportMenu()
+    {
+        $menu = [];
+
+        foreach ($this->menu as $item) {
+            $menu[] = $item->export();
+        }
+
+        return $menu;
+    }
+
     function export()
     {
         return [
             'resources' => $this->exportResources(),
             'tools' => $this->exportTools(),
+            'menu' => $this->exportMenu(),
         ];
     }
 

@@ -23,4 +23,7 @@ return [
         ],
     ],
 
+    'menu' => [
+        \Luna\Menu\MenuItemAllResources::make('منابع', 'fa fa-database'),
+    ]
 ];

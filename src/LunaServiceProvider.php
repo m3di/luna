@@ -23,6 +23,7 @@ class LunaServiceProvider extends ServiceProvider
         $this->registerRoutes();
         $this->registerResources();
         $this->registerTools();
+        $this->registerMenu();
     }
 
     public function register()
@@ -94,7 +95,7 @@ class LunaServiceProvider extends ServiceProvider
             $path = config('luna.resources.auto', app_path('App\\Luna\\Resources\\'));
             $this->app['luna']->setResources(ClassFinder::getClassesInNamespace($path, ClassFinder::RECURSIVE_MODE));
         }
-        
+
 
         if ($mode == 'manual') {
             $this->app['luna']->setResources(config('luna.resources.manual', []));
@@ -104,5 +105,12 @@ class LunaServiceProvider extends ServiceProvider
     private function registerTools()
     {
         // $this->app['luna']->setTools($this->tools());
+    }
+
+    private function registerMenu()
+    {
+        $this->app['luna']->setMenu(config('luna.menu', [
+            \Luna\Menu\MenuItemAllResources::make('منابغ', 'fa fa-database'),
+        ]));
     }
 }
