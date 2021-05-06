@@ -16,6 +16,7 @@
                     <button class="btn btn-light bg-white border btn-group-append" type="button"
                             id="dropdownActions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-play"></i>
+                      <span v-text="lang('action.custom_actions')"></span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownActions">
                         <button class="dropdown-item" @click="callAction(id)" v-for="(action, id) in actions">
@@ -26,9 +27,11 @@
                 <button type="button" class="btn btn-light bg-white border" v-if="editEnable"
                         @click="$router.push({name:'resources.edit', params:{resource:resource, model:values[primaryKey]}})">
                     <i class="fa fa-edit"></i>
+                  <span v-text="lang('action.edit')"></span>
                 </button>
-                <button type="button" class="btn btn-light bg-white border" @click="remove" v-if="removeEnable">
-                    <i class="fa fa-trash text-danger"></i>
+                <button type="button" class="btn btn-light bg-white border text-danger" @click="remove" v-if="removeEnable">
+                    <i class="fa fa-trash"></i>
+                  <span v-text="lang('action.delete')"></span>
                 </button>
             </div>
         </div>

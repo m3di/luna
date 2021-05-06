@@ -52,6 +52,9 @@ Vue.use(Luna);
 Vue.mixin({
     methods: {
         route: route,
+        lang(key) {
+            return window.lang[key]
+        }
     }
 });
 

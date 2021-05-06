@@ -90,7 +90,7 @@ class BelongsTo extends Relation
         $values = array_filter($value, 'is_numeric');
 
         if (count($values) > 0) {
-            $query->whereIn(call_user_func([$query->getModel(), $this->relation])->getForeignKey(), $values);
+            $query->whereIn(call_user_func([$query->getModel(), $this->relation])->getForeignKeyName(), $values);
         }
     }
 
@@ -177,7 +177,7 @@ class BelongsTo extends Relation
         /** @var \Illuminate\Database\Eloquent\Relations\BelongsTo $relation */
         $relation = call_user_func([$hostModel, $this->getRelation()]);
 
-        $query->leftJoin($targetModel->getTable(), $targetModel->getTable() . '.' . $relation->getOwnerKey(), '=', $hostModel->getTable() . '.' . $relation->getForeignKey());
+        $query->leftJoin($targetModel->getTable(), $targetModel->getTable() . '.' . $relation->getOwnerKeyName(), '=', $hostModel->getTable() . '.' . $relation->getForeignKeyName());
     }
 
     function dependencies(...$dependencies)

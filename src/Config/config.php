@@ -25,5 +25,9 @@ return [
 
     'menu' => [
         \Luna\Menu\MenuItemAllResources::make('منابع', 'fa fa-database'),
+    ],
+
+    'ui' => [
+        'action_buttons_text' => true,
     ]
 ];
