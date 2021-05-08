@@ -18,7 +18,11 @@ export default {
                 type: data.message.type,
                 confirmButtonText: 'خب!',
                 target: document.getElementById('app')
-            })
+            }).then(() => {
+                if (data.message.refresh) {
+                    window.location.reload()
+                }
+            });
         } else if (data.action == 'redirect') {
             if (data.redirect.new_tab) {
                 let win = window.open(data.redirect.url, '_blank');

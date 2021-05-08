@@ -79,7 +79,7 @@ abstract class Action
         ];
     }
 
-    public static function message($title, $text, $type = 'info')
+    public static function message($title, $text, $type = 'info', $refresh = false)
     {
         return [
             'action' => 'message',
@@ -87,7 +87,8 @@ abstract class Action
                 'title' => $title,
                 'text' => $text,
                 'type' => $type,
-            ]
+            ],
+            'refresh' => $refresh,
         ];
     }
 

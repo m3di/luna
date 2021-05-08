@@ -41,15 +41,12 @@ class LunaServiceProvider extends ServiceProvider
         ]]);
 
         if (!$this->app->routesAreCached()) {
+            $mids = config('luna.middleware', []);
+
             $this->app['router']->group([
                 'as' => 'luna.',
                 'prefix' => config('luna.route_prefix', 'luna'),
-                'middleware' => [
-                    'web',
-                    'auth',
-                    AccessLuna::class,
-                    BootLuna::class,
-                ],
+                'middleware' => array_merge($mids, [AccessLuna::class, BootLuna::class,])
             ], function () {
                 $this->app['router']->get('app/{vue?}', LunaController::class . '@index')->name('index')->where('vue', '[\/\w\.-]*');
 

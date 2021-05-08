@@ -4,6 +4,10 @@ return [
 
     'route_prefix' => 'luna',
 
+    'middleware' => [
+        'web',
+        'auth',
+    ],
 
     'resources' => [
         'mode' => 'auto', // or manual
