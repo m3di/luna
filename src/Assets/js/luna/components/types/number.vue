@@ -27,6 +27,7 @@
                            class="form-control"
                            :class="{'is-invalid': validationState == false}"
                            v-model="values[field.name]"
+                           :step="field.step"
                            @input="clearValidationErrors">
 
                     <div class="invalid-feedback"
