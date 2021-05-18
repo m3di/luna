@@ -157,6 +157,7 @@ class Luna
     function export()
     {
         return [
+            'route_prefix' => config('luna.route_prefix', 'luna'),
             'resources' => $this->exportResources(),
             'tools' => $this->exportTools(),
             'menu' => $this->exportMenu(),

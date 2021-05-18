@@ -33,7 +33,7 @@ import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
 import VueSweetalert2 from 'vue-sweetalert2'
-import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
+import VuePersianDatetimePicker from 'vue-persian-datetime-picker';
 
 import AjaxForm from './ajax-form/main'
 import Luna from './luna/main'
@@ -44,9 +44,9 @@ Vue.use(Vuex);
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 Vue.use(VueSweetalert2);
-Vue.use(VuePersianDatetimePicker, {name: 'date-picker', props: {}});
 Vue.use(AjaxForm);
 Vue.use(Luna);
+Vue.component('date-picker', VuePersianDatetimePicker);
 
 
 Vue.mixin({
@@ -204,7 +204,7 @@ const routes = [
 const router = new VueRouter({
     routes,
     mode: 'history',
-    base: 'luna/app',
+    base: window.luna.route_prefix + '/app',
     linkActiveClass: 'active'
 });
 

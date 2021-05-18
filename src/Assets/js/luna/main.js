@@ -14,6 +14,7 @@ import LunaTypeNumber from './components/types/number'
 import LunaTypeEmail from './components/types/email'
 import LunaTypeTextarea from './components/types/textarea'
 import LunaTypeLiveTextarea from './components/types/live-textarea'
+import LunaTypeDatePicker from './components/types/date-picker'
 import LunaTypeBoolean from './components/types/boolean'
 import LunaTypeBelongsTo from './components/types/belongs_to'
 import LunaTypeBelongsToMany from './components/types/belongs_to_many'
@@ -50,6 +51,7 @@ export default {
         Vue.component('luna-type-email', LunaTypeEmail);
         Vue.component('luna-type-textarea', LunaTypeTextarea);
         Vue.component('luna-type-live_textarea', LunaTypeLiveTextarea);
+        Vue.component('luna-type-date_picker', LunaTypeDatePicker);
         Vue.component('luna-type-boolean', LunaTypeBoolean);
         Vue.component('luna-type-belongs_to', LunaTypeBelongsTo);
         Vue.component('luna-type-belongs_to_many', LunaTypeBelongsToMany);
