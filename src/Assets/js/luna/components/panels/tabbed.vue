@@ -1,6 +1,7 @@
 <template>
     <div class="mb-3">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <h5 class="pt-3 mb-3" v-html="panel.name" v-if="panel.name"></h5>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" v-for="(field, index) in visibleFields">
                 <a class="nav-link" :class="{'active':activeTab==index}" href="javascript:void(0)"
                    @click="changeTab(index)" v-text="field.title"></a>
