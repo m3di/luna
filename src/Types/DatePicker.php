@@ -43,7 +43,7 @@ class DatePicker extends Type
         $this->inheritedRules[] = (new RuleGenerator())->creation($rule)->update($rule);
 
         $this->resolver = function ($value) {
-            return $value ?? Carbon::createFromTimeString($value)->isoFormat($this->format);
+            return is_null($value) ? null : Carbon::createFromTimeString($value)->isoFormat($this->format);
         };
     }
 
@@ -52,7 +52,7 @@ class DatePicker extends Type
         $value = $request->get($this->name);
 
         return $this->getColumnName() ? [
-            $this->getColumnName() => $value ?? Carbon::createFromIsoFormat($this->format, $value),
+            $this->getColumnName() => is_null($value) ? null : Carbon::createFromIsoFormat($this->format, $value),
         ] : [];
     }
 
