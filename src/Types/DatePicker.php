@@ -43,7 +43,7 @@ class DatePicker extends Type
         $this->inheritedRules[] = (new RuleGenerator())->creation($rule)->update($rule);
 
         $this->resolver = function ($value) {
-            return Carbon::createFromTimeString($value)->isoFormat($this->format);
+            return $value ?? Carbon::createFromTimeString($value)->isoFormat($this->format);
         };
     }
 
