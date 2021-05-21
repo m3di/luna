@@ -49,8 +49,10 @@ class DatePicker extends Type
 
     function extractValuesFromRequest(Request $request, ?Model $model = null)
     {
+        $value = $request->get($this->name);
+
         return $this->getColumnName() ? [
-            $this->getColumnName() => Carbon::createFromIsoFormat($this->format, $request->get($this->name)),
+            $this->getColumnName() => $value ?? Carbon::createFromIsoFormat($this->format, $value),
         ] : [];
     }
 
