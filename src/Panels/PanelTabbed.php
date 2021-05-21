@@ -22,9 +22,9 @@ class PanelTabbed extends Panel
         $this->name = $name;
     }
 
-    public static function make()
+    public static function make($name=null)
     {
-        return new static();
+        return new static($name);
     }
 
     function export()
