@@ -96,7 +96,7 @@
           </div>
         </div>
       </div>
-      <div v-if="models.total > 0">
+      <div v-if="models.total > 0 && models.total > models.per_page">
         <div>
           <div class="d-flex justify-content-between align-items-center">
             <b-pagination
