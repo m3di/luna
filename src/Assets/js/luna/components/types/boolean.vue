@@ -7,7 +7,7 @@
             </small>
         </template>
         <div class="row" v-if="displayType == 2">
-            <div :class="frameClass">
+            <div class="col-md-3">
                 <strong v-html="field.title"></strong>
             </div>
 

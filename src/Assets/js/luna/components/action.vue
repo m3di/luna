@@ -58,7 +58,7 @@ export default {
       'si',
     ]),
     fire() {
-      if (this.action.fields) {
+      if (this.action.fields && this.action.fields.length > 0) {
         this.openForm = true;
         this.$nextTick(() => {
           this.$refs['form'].show()

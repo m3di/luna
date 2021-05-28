@@ -38,6 +38,7 @@ class HasMany extends Relation
     protected $showIndexColumn = false;
 
     protected $query = null;
+    protected $search = true;
     protected $searchables = null;
     protected $dependencies = [];
 
@@ -85,6 +86,11 @@ class HasMany extends Relation
     function query($query)
     {
         $this->query = $query;
+        return $this;
+    }
+
+    function noSearch() {
+        $this->search = false;
         return $this;
     }
 
@@ -203,6 +209,7 @@ class HasMany extends Relation
                 'delete' => !$this->disableDeleteLink,
                 'index_column' => $this->showIndexColumn,
                 'dependencies' => $this->dependencies,
+                'search' => $this->search,
             ];
     }
 

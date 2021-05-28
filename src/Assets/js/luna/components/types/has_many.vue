@@ -18,6 +18,7 @@
                          :primary-key="rPrimaryKey"
                          :fetch-url="fetchUrl"
                          :index-column="field.index_column"
+                         :search-bar="field.search"
                          @create="create"
                          @details="details"
                          @edit="edit"

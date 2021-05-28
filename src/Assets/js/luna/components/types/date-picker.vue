@@ -5,7 +5,7 @@
       <slot name="empty" v-else></slot>
     </template>
     <div class="row" v-if="displayType == 2">
-      <div :class="frameClass">
+      <div class="col-md-3">
         <strong v-html="field.title"></strong>
       </div>
 
@@ -21,7 +21,7 @@
                :for="`__input__${field.name}`"
                v-html="field.title"></label>
 
-        <div class="col-md-9 col-lg-5">
+        <div :class="frameClass">
           <date-picker
               v-model="values[field.name]"
               :format="field.format"

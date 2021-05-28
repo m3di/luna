@@ -39,6 +39,7 @@ class BelongsToMany extends Relation
 
     protected $query = null;
     protected $candidatesQuery = null;
+    protected $search = false;
     protected $searchables = null;
 
     function __construct($name)
@@ -79,6 +80,11 @@ class BelongsToMany extends Relation
     function candidatesQuery($query)
     {
         $this->candidatesQuery = $query;
+        return $this;
+    }
+
+    function noSearch() {
+        $this->search = false;
         return $this;
     }
 
@@ -246,6 +252,7 @@ class BelongsToMany extends Relation
                 'edit' => !$this->disableEditPanel,
                 'detach' => !$this->disableDetachOption,
                 'index_column' => $this->showIndexColumn,
+                'search' => $this->search,
             ];
     }
 
