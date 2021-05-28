@@ -13,7 +13,7 @@
                 <strong v-html="field.title"></strong>
             </div>
 
-            <div class="col-md-9">
+            <div :class="frameClass">
                 <span v-text="field.options[values[field.name]]"
                       v-if="field.options.hasOwnProperty(values[field.name])"></span>
                 <slot name="empty" v-else></slot>
@@ -26,7 +26,7 @@
                        :for="`__input__${field.name}`"
                        v-html="field.title"></label>
 
-                <div class="col-md-9 col-lg-5">
+                <div :class="frameClass">
                     <div class="custom-control custom-radio" v-for="(value, key) in field.options">
                         <input type="radio" :id="`__input__${field.name}_${key}`" :name="`__input__${field.name}`"
                                class="custom-control-input" :value="key" v-model="values[field.name]"

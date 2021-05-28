@@ -13,7 +13,7 @@
                 <i class="fa fa-refresh fa-spin" v-if="loading"></i>
             </div>
 
-            <div class="col-md-9">
+            <div :class="frameClass">
                 <textarea :name="field.name"
                           rows="4"
                           @input="save"
@@ -30,7 +30,7 @@
                        :for="`__input__${field.name}`"
                        v-html="field.title"></label>
 
-                <div class="col-md-9">
+                <div :class="frameClass">
                     <textarea :name="field.name"
                               rows="4"
                               class="form-control"

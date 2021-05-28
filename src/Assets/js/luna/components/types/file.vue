@@ -11,7 +11,7 @@
                 <strong v-html="field.title"></strong>
             </div>
 
-            <div class="col-md-9">
+            <div :class="frameClass">
                 <span v-if="value">
                     <a :href="value" target="_blank">فایل <i class="fa fa-external-link"></i></a>
                 </span>
@@ -25,7 +25,7 @@
                        :for="`__input__${field.name}`"
                        v-html="field.title"></label>
 
-                <div class="col-md-9">
+                <div :class="frameClass">
                     <input ref="file" type="file" @change="upload" style="display: none;"/>
                     <div class="mb-3" v-text="fileName" v-if="fileName"></div>
                     <div>

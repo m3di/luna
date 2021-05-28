@@ -24,6 +24,7 @@ import LunaTypeHTML from './components/types/html'
 import LunaTypeFile from './components/types/file'
 import LunaTypeImage from './components/types/image'
 import LunaTypeRadio from './components/types/radio'
+import LunaTypeSelect from './components/types/select'
 
 import LunaMetric from './components/metrics/metric'
 import LunaMetricBar from './components/metrics/metric-bar'
@@ -32,6 +33,7 @@ import LunaPanelSimple from './components/panels/simple'
 import LunaPanelTabbed from './components/panels/tabbed'
 
 import LunaMenu from './components/menu/luna-menu'
+import LunaAction from './components/action'
 
 export default {
     install(Vue, options) {
@@ -61,11 +63,13 @@ export default {
         Vue.component('luna-type-file', LunaTypeFile);
         Vue.component('luna-type-image', LunaTypeImage);
         Vue.component('luna-type-radio', LunaTypeRadio);
+        Vue.component('luna-type-select', LunaTypeSelect);
 
         Vue.component('luna-metric', LunaMetric);
         Vue.component('luna-metric-bar', LunaMetricBar);
 
         Vue.component('luna-menu', LunaMenu);
+        Vue.component('luna-action', LunaAction);
 
         Vue.component('luna-panel-simple', LunaPanelSimple);
         Vue.component('luna-panel-tabbed', LunaPanelTabbed);

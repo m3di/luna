@@ -64,6 +64,7 @@ abstract class Action
     {
         return [
             'title' => $this->title,
+            'fields' => array_map(function(Type $type){return $type->export();}, $this->getFields())
         ];
     }
 

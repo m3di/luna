@@ -1,8 +1,6 @@
 export default {
     props: {
-        resource: {
-            required: true
-        },
+        resource: {},
         field: {
             required: true
         },
@@ -29,6 +27,9 @@ export default {
         noTitle: {
             type: Boolean,
             default: false,
+        },
+        frameClass: {
+            default: 'col-md-9 col-lg-4'
         }
     },
     data() {

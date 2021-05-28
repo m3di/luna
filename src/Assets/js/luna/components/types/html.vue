@@ -9,7 +9,7 @@
                 <strong v-html="field.title"></strong>
             </div>
 
-            <div class="col-md-9">
+            <div :class="frameClass">
                 <div v-if="value">
                     <p>
                         <a href="javascript:void(0)" @click="toggle = !toggle">
@@ -31,7 +31,7 @@
                        :for="`__input__${field.name}`"
                        v-html="field.title"></label>
 
-                <div class="col-md-9">
+                <div :class="frameClass">
                     <div id="editor">
                         <ckeditor :id="`__input__${field.name}`" v-model="values[field.name]" :toolbar="field.toolbars"
                                   @input="clearValidationErrors"></ckeditor>

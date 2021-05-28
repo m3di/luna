@@ -11,7 +11,7 @@
                 <strong v-html="field.title"></strong>
             </div>
 
-            <div class="col-md-9">
+            <div :class="frameClass">
                 <span v-if="value">
                     <img class="bg-white border img-fluid" alt="image" style="max-height: 200px" :src="value">
                 </span>
@@ -25,7 +25,7 @@
                        :for="`__input__${field.name}`"
                        v-html="field.title"></label>
 
-                <div class="col-md-9">
+                <div :class="frameClass">
                     <div class="mb-3" v-if="src">
                         <vue-cropper ref="cropper"
                                      :src="src"

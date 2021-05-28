@@ -16,6 +16,7 @@
                          :remove-enable="removeEnable"
                          :primary-key="primaryKey"
                          :index-column="indexColumn"
+                         :search-bar="searchBar"
                          @create="create"
                          @details="details"
                          @edit="edit"

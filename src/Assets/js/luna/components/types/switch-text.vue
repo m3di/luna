@@ -9,7 +9,7 @@
                 <strong v-html="field.title"></strong>
             </div>
 
-            <div class="col-md-9">
+            <div :class="frameClass">
                 <span v-text="value" v-if="value"></span>
                 <slot name="empty" v-else></slot>
             </div>
@@ -21,7 +21,7 @@
                        :for="`__input__${field.name}`"
                        v-html="field.title"></label>
 
-                <div class="col-md-9 col-lg-5">
+                <div :class="frameClass">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <label class="input-group-text">

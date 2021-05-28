@@ -40,6 +40,9 @@ export default {
         },
         indexColumn() {
             return this.$store.state.resources[this.resource].index_column
+        },
+        searchBar() {
+            return this.$store.state.resources[this.resource].search
         }
     }
 }

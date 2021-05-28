@@ -46,13 +46,24 @@ class LunaController extends BaseController
         $resource = luna::getResource($resource);
         $fields = $resource->visibleFieldsOnIndex();
 
-        $paginate = ResourceModelRepository::make($resource)
+        $query = ResourceModelRepository::make($resource)
             ->fields($fields)
             ->filters(json_decode($request->get('filters', '[]'), true))
             ->searchFor(trim($request->get('search')))
             ->sortBy(trim($request->get('sort')), $request->has('desc'))
-            ->getQueryWithRelations()
-            ->paginate(20);
+            ->getQueryWithRelations();
+
+        if ($default_sort = $resource->getDefaultSort()) {
+            if (is_array($default_sort)) {
+                $query->orderBy($default_sort[0], $default_sort[1]);
+            } elseif (is_callable($default_sort)) {
+                call_user_func($default_sort, $query);
+            } else {
+                $query->orderBy($default_sort);
+            }
+        }
+
+        $paginate = $query->paginate(20);
 
         $data = [];
 

@@ -7,7 +7,7 @@
                        :for="`__input__${field.name}`"
                        v-html="field.title"></label>
 
-                <div class="col-md-9 col-lg-5">
+                <div :class="frameClass">
                     <input type="password"
                            :name="field.name"
                            :id="`__input__${field.name}`"

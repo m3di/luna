@@ -8,7 +8,7 @@
                 <strong v-html="field.title"></strong>
             </div>
 
-            <div class="col-md-9">
+            <div :class="frameClass">
                 <span v-text="value || 0"></span>
             </div>
         </div>
@@ -19,7 +19,7 @@
                        :for="`__input__${field.name}`"
                        v-html="field.title"></label>
 
-                <div class="col-md-9 col-lg-5">
+                <div :class="frameClass">
                     <input type="number"
                            :name="field.name"
                            :id="`__input__${field.name}`"

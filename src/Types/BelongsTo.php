@@ -15,6 +15,7 @@ class BelongsTo extends Relation
     protected $type = 'belongs_to';
     protected $join_when_sorting = true;
 
+    protected $link_to_related = true;
     protected $filterable = true;
     protected $query = null;
     protected $dependencies = [];
@@ -35,6 +36,18 @@ class BelongsTo extends Relation
         })->displayUsing(function ($val, ?Model $model, $pivot) {
             return $this->displayForRelatedModel($model->getRelation($this->getRelation()));
         });
+    }
+
+    function linkToRelated()
+    {
+        $this->link_to_related = true;
+        return $this;
+    }
+
+    function withoutLinkToRelated()
+    {
+        $this->link_to_related = false;
+        return $this;
     }
 
     protected function resolveForRelatedModel(?Model $model)
@@ -189,6 +202,7 @@ class BelongsTo extends Relation
     function export()
     {
         return [
+                'link' => $this->link_to_related,
                 'dependencies' => $this->dependencies,
             ] + parent::export();
     }

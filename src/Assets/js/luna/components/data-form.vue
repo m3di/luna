@@ -15,7 +15,8 @@
                                                :display-type="3"
                                                :primary-key="primaryKey"
                                                :retrieve-url-generator="retrieveUrlGenerator"
-                                               :values="values"></component>
+                                               :values="values"
+                                    ></component>
                                 </div>
                             </template>
                         </div>
@@ -27,8 +28,6 @@
     </div>
 </template>
 <script>
-    import {mapActions} from 'vuex';
-
     export default {
         props: {
             resource: {

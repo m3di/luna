@@ -5,11 +5,11 @@
       <slot name="empty" v-else></slot>
     </template>
     <div class="row" v-if="displayType == 2">
-      <div class="col-md-3">
+      <div :class="frameClass">
         <strong v-html="field.title"></strong>
       </div>
 
-      <div class="col-md-9">
+      <div :class="frameClass">
         <span v-text="dv" v-if="dv"></span>
         <slot name="empty" v-else></slot>
       </div>

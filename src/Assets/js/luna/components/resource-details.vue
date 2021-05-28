@@ -19,9 +19,15 @@
                       <span v-text="lang('action.custom_actions')"></span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownActions">
-                        <button class="dropdown-item" @click="callAction(id)" v-for="(action, id) in actions">
-                            <span v-text="action.title"></span>
-                        </button>
+                      <template v-for="(action, id) in actions">
+                        <luna-action :resource="resource" :idx="id" :action="action" :models="[values[primaryKey]]">
+                          <template v-slot="{fire}">
+                            <button class="dropdown-item" @click="fire">
+                              <span v-text="action.title"></span>
+                            </button>
+                          </template>
+                        </luna-action>
+                      </template>
                     </div>
                 </div>
                 <button type="button" class="btn btn-light bg-white border" v-if="editEnable"
@@ -51,7 +57,6 @@
 <script>
     import {mapActions} from 'vuex';
     import resourceMixin from '../mixins/resource'
-    import actions from '../actions'
 
     export default {
         mixins: [resourceMixin],
@@ -106,10 +111,7 @@
                         }).then(() => this.$router.go(-1))
                     }
                 })
-            },
-            callAction(action) {
-                actions.call(this, this.resource, action, [this.values[this.primaryKey]])
-            },
+            }
         },
         created() {
             this.loading = true;

@@ -24,6 +24,7 @@ abstract class Resource
     protected $metrics = [];
     protected $actions = [];
 
+    protected $search = true;
     protected $searchable = [];
     protected $primary_key = null;
 
@@ -36,6 +37,7 @@ abstract class Resource
     protected $disableDeleteOption = false;
 
     protected $showIndexColumn = false;
+    protected $defaultSort = null;
 
     function __construct()
     {
@@ -234,6 +236,7 @@ abstract class Resource
             'edit' => !$this->disableEditPanel,
             'remove' => !$this->disableDeleteOption,
             'index_column' => $this->showIndexColumn,
+            'search' => $this->search,
         ];
 
         $export['panels'] = array_map(function (Panel $a) {
@@ -328,4 +331,6 @@ abstract class Resource
 
     function deleting($request, $model) {}
     function deleted($request, $model) {}
+
+    public function getDefaultSort() {return $this->defaultSort;}
 }
