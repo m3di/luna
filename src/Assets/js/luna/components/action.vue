@@ -15,7 +15,8 @@
           </template>
           <div class="mt-3 pt-3 px-3 border-top text-right" style="margin-left: -1rem; margin-right: -1rem">
             <button class="btn btn-primary" @click="$refs.ajaxForm.submit()" :disabled="isLoading">
-              <span>تایید</span>
+              <i class="fa fa-refresh fa-spin" v-if="isLoading"></i>
+              <span v-else>تایید</span>
             </button>
           </div>
         </div>

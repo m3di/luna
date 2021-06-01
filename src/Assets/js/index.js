@@ -135,6 +135,12 @@ const store = new Vuex.Store({
                                 document.location.reload();
                                 reject(result);
                                 break;
+                            case 403:
+                                context.dispatch('error', {
+                                    title: 'Access Denied',
+                                    text: result.response.hasOwnProperty('data') && result.response.data.hasOwnProperty('message') ? result.response.data.message : result.message
+                                }).then(x => reject(result));
+                                break;
                             case 422:
                                 reject(result);
                                 break;
