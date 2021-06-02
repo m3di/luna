@@ -3,6 +3,10 @@
 return [
 
     'route_prefix' => 'luna',
+    'index_page' => [
+        'type' => 'resource',
+        'resource' => '',
+    ],
 
     'middleware' => [
         'web',

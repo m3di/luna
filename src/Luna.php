@@ -154,13 +154,27 @@ class Luna
         return $menu;
     }
 
+    function exportIndexPage() {
+        if (config('luna.index_page.type') == 'resource') {
+            $name = (new \ReflectionClass($this->getResource(config('luna.index_page.resource'))))->getShortName();
+
+            return [
+                'type' => 'resource',
+                'resource' => $name
+            ];
+        }
+
+        return null;
+    }
+
     function export()
     {
         return [
-            'route_prefix' => config('luna.route_prefix', 'luna'),
+            'route_prefix' => config('luna.route_prefix'),
             'resources' => $this->exportResources(),
             'tools' => $this->exportTools(),
             'menu' => $this->exportMenu(),
+            'index' => $this->exportIndexPage(),
         ];
     }
 

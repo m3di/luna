@@ -66,6 +66,7 @@ const store = new Vuex.Store({
         resources: window.luna.resources,
         tools: window.luna.tools,
         menu: window.luna.menu,
+        index: window.luna.index,
     },
     mutations: {
         loading(state, payload) {
@@ -169,6 +170,12 @@ const store = new Vuex.Store({
 });
 
 const routes = [
+    {
+        name: 'index',
+        path: '/',
+        component: require('./luna/components/index'),
+        props: true,
+    },
     {
         name: 'resources',
         path: '/resources/:resource',
