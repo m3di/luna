@@ -16,17 +16,25 @@ class View extends Type
     protected $visibleWhenCreating = false;
 
     protected $view;
+    protected $mapping;
 
     function __construct($name)
     {
         parent::__construct($name);
 
         $this->presenter = function ($value, $model) {
-            return (view($this->view, ['model' => $model])->render());
+            return view($this->view, array_merge(
+                ['model' => $model],
+                call_user_func($this->mapping, $model)
+            ))->render();
         };
 
         $this->resolver = function () {
             return '';
+        };
+
+        $this->mapping = function () {
+            return [];
         };
     }
 
@@ -41,6 +49,12 @@ class View extends Type
     function view($view)
     {
         $this->view = $view;
+        return $this;
+    }
+
+    function mapping($mapping)
+    {
+        $this->mapping = $mapping;
         return $this;
     }
 
