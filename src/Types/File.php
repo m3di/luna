@@ -7,6 +7,7 @@ use Luna\Rules\RuleGenerator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 
 class File extends Type
 {
@@ -129,6 +130,6 @@ class File extends Type
             return call_user_func_array($this->nameGenerator, [$file, $model]);
         }
 
-        return str_random(40) . '.' . $file->getClientOriginalExtension();
+        return Str::random(40) . '.' . $file->getClientOriginalExtension();
     }
 }
