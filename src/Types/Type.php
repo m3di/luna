@@ -59,6 +59,11 @@ abstract class Type
         return $this->resource;
     }
 
+    function name($name) {
+        $this->name = $name;
+        return $this;
+    }
+
     function getName()
     {
         return $this->name;
