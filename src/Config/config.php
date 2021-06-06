@@ -32,7 +32,7 @@ return [
     ],
 
     'menu' => [
-        \Luna\Menu\MenuItemAllResources::make('منابع', 'fa fa-database'),
+        \Luna\Menu\AllResources::make('منابع', 'fa fa-database'),
     ],
 
     'ui' => [

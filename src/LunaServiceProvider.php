@@ -108,7 +108,7 @@ class LunaServiceProvider extends ServiceProvider
     private function registerMenu()
     {
         $this->app['luna']->setMenu(config('luna.menu', [
-            \Luna\Menu\MenuItemAllResources::make('منابغ', 'fa fa-database'),
+            \Luna\Menu\AllResources::make('منابغ', 'fa fa-database'),
         ]));
     }
 }

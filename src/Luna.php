@@ -5,7 +5,7 @@ namespace Luna;
 
 use Luna\Exceptions\NotARegisterableResource;
 use Luna\Exceptions\ResourceNotRegisteredException;
-use Luna\Menu\MenuItem;
+use Luna\Menu\Item;
 use Luna\Resources\Resource;
 use Luna\Tools\Tool;
 use Illuminate\Foundation\Application;
@@ -108,7 +108,7 @@ class Luna
         }
     }
 
-    function addMenu(MenuItem $item, $index = null)
+    function addMenu(Item $item, $index = null)
     {
         if (is_null($index)) {
             $this->menu[] = $item;
