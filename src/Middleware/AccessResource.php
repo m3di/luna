@@ -2,7 +2,7 @@
 
 namespace Luna\Middleware;
 
-use Luna\Exceptions\ResourceNotRegisteredException;
+use Luna\Exceptions\NotRegisteredException;
 use Luna\Resources\Resource;
 use Closure;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class AccessResource
         try {
             /** @var Resource $resource */
             $resource = app('luna')->getResource($param);
-        } catch (ResourceNotRegisteredException $e) {
+        } catch (NotRegisteredException $e) {
             return abort(404);
         }
 

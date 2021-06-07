@@ -44,6 +44,11 @@ abstract class Resource
         $this->primary_key = (new $this->model)->getKeyName();
     }
 
+    function getName()
+    {
+        return (new \ReflectionClass($this))->getShortName();
+    }
+
     function boot()
     {
         $this->panels = [];
@@ -223,13 +228,11 @@ abstract class Resource
 
     function export()
     {
-        $className = (new \ReflectionClass($this))->getShortName();
-
         $export = [
-            'name' => $className,
+            'name' => $this->getName(),
             'visible' => $this->isVisible(),
-            'singular' => $this->singular ?? str_singular($className),
-            'plural' => $this->plural ?? str_plural($this->singular ?? str_singular($className)),
+            'singular' => $this->singular ?? str_singular($this->getName()),
+            'plural' => $this->plural ?? str_plural($this->singular ?? str_singular($this->getName())),
             'primary_key' => $this->primary_key,
             'details' => !$this->disableDetailsPanel,
             'create' => !$this->disableCreatePanel,
@@ -293,44 +296,68 @@ abstract class Resource
         }, []);
     }
 
-    function fireCreating($request, $model) {
+    function fireCreating($request, $model)
+    {
         $this->creating($request, $model);
         /** @todo: broadcast global event */
     }
 
-    function fireCreated($request, $model) {
+    function fireCreated($request, $model)
+    {
         $this->created($request, $model);
         /** @todo: broadcast global event */
     }
 
-    function creating($request, $model) {}
-    function created($request, $model) {}
+    function creating($request, $model)
+    {
+    }
 
-    function fireUpdating($request, $model) {
+    function created($request, $model)
+    {
+    }
+
+    function fireUpdating($request, $model)
+    {
         $this->updating($request, $model);
         /** @todo: broadcast global event */
     }
 
-    function fireUpdated($request, $model) {
+    function fireUpdated($request, $model)
+    {
         $this->updated($request, $model);
         /** @todo: broadcast global event */
     }
 
-    function updating($request, $model) {}
-    function updated($request, $model) {}
+    function updating($request, $model)
+    {
+    }
 
-    function fireDeleting($request, $model) {
+    function updated($request, $model)
+    {
+    }
+
+    function fireDeleting($request, $model)
+    {
         $this->deleting($request, $model);
         /** @todo: broadcast global event */
     }
 
-    function fireDeleted($request, $model) {
+    function fireDeleted($request, $model)
+    {
         $this->deleted($request, $model);
         /** @todo: broadcast global event */
     }
 
-    function deleting($request, $model) {}
-    function deleted($request, $model) {}
+    function deleting($request, $model)
+    {
+    }
 
-    public function getDefaultSort() {return $this->defaultSort;}
+    function deleted($request, $model)
+    {
+    }
+
+    public function getDefaultSort()
+    {
+        return $this->defaultSort;
+    }
 }

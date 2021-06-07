@@ -5,20 +5,20 @@ namespace Luna\Menu;
 
 
 use Luna;
-use Luna\Resources\Resource;
+use Luna\Views\View;
 
-class ResourceLink extends Link
+class ViewLink extends Link
 {
 
-    protected $resource;
+    protected $view;
     /**
-     * @var Resource|null
+     * @var View|null
      */
     protected $temp = null;
 
     function __construct($class)
     {
-        $this->resource = $class;
+        $this->view = $class;
     }
 
     public static function make($class)
@@ -28,32 +28,32 @@ class ResourceLink extends Link
 
     protected function getLinkType()
     {
-        return 'resource';
+        return 'view';
     }
 
     protected function getTitle()
     {
-        return $this->getResourceObject()->getPlural();
+        return $this->getViewObject()->getTitle();
     }
 
     function export()
     {
         return parent::export() + [
-                'resource' => $this->getResourceObject()->getName(),
+                'view' => $this->getViewObject()->getName(),
             ];
     }
 
     /**
      * @return Resource
      */
-    protected function getResourceObject()
+    protected function getViewObject()
     {
-        if (is_object($this->resource)) {
-            return $this->resource;
+        if (is_object($this->view)) {
+            return $this->view;
         }
 
         if (is_null($this->temp)) {
-            $this->temp = Luna::getResource($this->resource);
+            $this->temp = Luna::getView($this->view);
         }
 
         return $this->temp;

@@ -63,10 +63,7 @@ const store = new Vuex.Store({
         loading: false,
         loading_count: 0,
         user: window.user,
-        resources: window.luna.resources,
-        tools: window.luna.tools,
-        menu: window.luna.menu,
-        index: window.luna.index,
+        ...window.luna,
     },
     mutations: {
         loading(state, payload) {
@@ -210,6 +207,12 @@ const routes = [
         name: 'tools',
         path: '/tools/:name',
         component: require('./luna/components/tool-container'),
+        props: true
+    },
+    {
+        name: 'views',
+        path: '/views/:view',
+        component: require('./luna/components/view'),
         props: true
     },
 ];

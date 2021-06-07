@@ -14,7 +14,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Luna;
 
-class LunaController extends BaseController
+class LunaResourceController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
@@ -33,11 +33,6 @@ class LunaController extends BaseController
     function index()
     {
         return view('luna.index');
-    }
-
-    function meta()
-    {
-        return Luna::exportResources();
     }
 
     function paginate(Request $request, $resource)

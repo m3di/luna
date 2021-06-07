@@ -16,19 +16,22 @@ return [
     'resources' => [
         'mode' => 'auto', // or manual
 
-        'auto' => app_path('Luna/Resources/'),
-        'manual' => [
-
-        ],
+        'auto' => 'App\\Luna\\Resources\\',
+        'manual' => [],
     ],
 
     'tools' => [
         'mode' => 'auto', // or manual
 
-        'auto' => app_path('Luna/Tools/'),
-        'manual' => [
+        'auto' => 'App\\Luna\\Tools\\',
+        'manual' => [],
+    ],
 
-        ],
+    'views' => [
+        'mode' => 'auto', // or manual
+
+        'auto' => 'App\\Luna\\Views\\',
+        'manual' => [],
     ],
 
     'menu' => [

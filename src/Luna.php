@@ -3,12 +3,13 @@
 namespace Luna;
 
 
-use Luna\Exceptions\NotARegisterableResource;
-use Luna\Exceptions\ResourceNotRegisteredException;
+use Luna\Exceptions\NotRegistrableException;
+use Luna\Exceptions\NotRegisteredException;
 use Luna\Menu\Item;
 use Luna\Resources\Resource;
 use Luna\Tools\Tool;
 use Illuminate\Foundation\Application;
+use Luna\Views\View;
 
 class Luna
 {
@@ -16,6 +17,8 @@ class Luna
     protected $app;
     protected $resources = [];
     protected $tools = [];
+    /** @var View[] */
+    protected $views = [];
     protected $menu = [];
 
     public function __construct($app)
@@ -34,17 +37,14 @@ class Luna
 
     function addResource($resource, $boot = true)
     {
-        $resource = is_object($resource) ? $resource : (new $resource());
+        if (!is_object($resource)) {
+            $resource = new $resource();
+        }
 
         if ($resource instanceof Resource) {
-            $this->resources[(new \ReflectionClass($resource))->getShortName()] = $resource;
-
-            if ($boot) {
-                $resource->boot();
-            }
-        } else {
-            throw new NotARegisterableResource($resource);
-        }
+            $this->resources[$resource->getName()] = $resource;
+            if ($boot) $resource->boot();
+        } else throw new NotRegistrableException($resource);
     }
 
     function getResources()
@@ -56,16 +56,15 @@ class Luna
     {
         try {
             $reflection = new \ReflectionClass($name);
-            $index = $reflection->getShortName();
+            $name = $reflection->getShortName();
         } catch (\ReflectionException $e) {
-            $index = $name;
         }
 
-        if (isset($this->resources[$index])) {
-            return $this->resources[$index];
+        if (isset($this->resources[$name])) {
+            return $this->resources[$name];
         }
 
-        throw new ResourceNotRegisteredException($name);
+        throw new NotRegisteredException($name);
     }
 
     function bootResources()
@@ -97,6 +96,46 @@ class Luna
     function getTool($name)
     {
         return $this->tools[$name];
+    }
+
+    function setViews($views)
+    {
+        $this->views = [];
+
+        foreach ($views as $view) {
+            $this->addView($view);
+        }
+    }
+
+    function addView($view)
+    {
+        if (!is_object($view)) {
+            $view = new $view();
+        }
+
+        if ($view instanceof View) {
+            $this->views[$view->getName()] = $view;
+        } else throw new NotRegistrableException($view);
+    }
+
+    function getViews()
+    {
+        return $this->views;
+    }
+
+    function getView($name)
+    {
+        try {
+            $reflection = new \ReflectionClass($name);
+            $name = $reflection->getShortName();
+        } catch (\ReflectionException $e) {
+        }
+
+        if (isset($this->views[$name])) {
+            return $this->views[$name];
+        }
+
+        throw new NotRegisteredException($name);
     }
 
     function setMenu($menu)
@@ -143,6 +182,19 @@ class Luna
         return $tools;
     }
 
+    function exportViews()
+    {
+        $views = [];
+
+        foreach ($this->getViews() as $name => $view) {
+            if ($view->authorize(auth()->user())) {
+                $views[$view->getName()] = $view->export();
+            }
+        }
+
+        return $views;
+    }
+
     function exportMenu()
     {
         $menu = [];
@@ -154,9 +206,10 @@ class Luna
         return $menu;
     }
 
-    function exportIndexPage() {
+    function exportIndexPage()
+    {
         if (config('luna.index_page.type') == 'resource') {
-            $name = (new \ReflectionClass($this->getResource(config('luna.index_page.resource'))))->getShortName();
+            $name = $this->getResource(config('luna.index_page.resource'))->getName();
 
             return [
                 'type' => 'resource',
@@ -173,6 +226,7 @@ class Luna
             'route_prefix' => config('luna.route_prefix'),
             'resources' => $this->exportResources(),
             'tools' => $this->exportTools(),
+            'views' => $this->exportViews(),
             'menu' => $this->exportMenu(),
             'index' => $this->exportIndexPage(),
         ];

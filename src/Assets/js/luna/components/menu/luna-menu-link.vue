@@ -8,6 +8,15 @@
         </router-link>
       </div>
     </template>
+
+    <template v-if="item.type=='view'">
+      <div class="nav-item">
+        <router-link class="nav-link" :to="{name: 'views', params: {view: item.view}}">
+          <i class="fa fa-chevron-left"></i>
+          <span v-text="item.title"></span>
+        </router-link>
+      </div>
+    </template>
   </div>
 </template>
 

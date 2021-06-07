@@ -3,9 +3,11 @@
 namespace Luna;
 
 use HaydenPierce\ClassFinder\ClassFinder;
-use Luna\Controllers\LunaController;
+use Luna\Controllers\LunaResourceController;
+use Luna\Controllers\LunaViewController;
 use Luna\Middleware\AccessLuna;
 use Luna\Middleware\AccessResource;
+use Luna\Middleware\AccessView;
 use Luna\Middleware\BootLuna;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +26,7 @@ class LunaServiceProvider extends ServiceProvider
         $this->registerRoutes();
         $this->registerResources();
         $this->registerTools();
+        $this->registerViews();
         $this->registerMenu();
     }
 
@@ -48,34 +51,36 @@ class LunaServiceProvider extends ServiceProvider
                 'prefix' => config('luna.route_prefix', 'luna'),
                 'middleware' => array_merge($mids, [AccessLuna::class, BootLuna::class,])
             ], function () {
-                $this->app['router']->get('app/{vue?}', LunaController::class . '@index')->name('index')->where('vue', '[\/\w\.-]*');
+                $this->app['router']->get('app/{vue?}', LunaResourceController::class . '@index')->name('index')->where('vue', '[\/\w\.-]*');
 
                 $this->app['router']->group([
                     'as' => 'resources.',
-                    'prefix' => 'resources',
+                    'prefix' => 'resources/{luna_resource}',
+                    'middleware' => [AccessResource::class]
                 ], function () {
-                    $this->app['router']->get('meta', LunaController::class . '@meta')->name('meta');
+                    $this->app['router']->get('paginate', LunaResourceController::class . '@paginate')->name('paginate');
+                    $this->app['router']->any('type/{type}', LunaResourceController::class . '@typeRetrieve')->name('type-retrieve');
+                    $this->app['router']->post('action/{action}', LunaResourceController::class . '@action')->name('action');
+                    $this->app['router']->get('metric/{metric}', LunaResourceController::class . '@metric')->name('metric');
 
-                    $this->app['router']->group([
-                        'prefix' => '{luna_resource}',
-                        'middleware' => [AccessResource::class]
-                    ], function () {
-                        $this->app['router']->get('paginate', LunaController::class . '@paginate')->name('paginate');
-                        $this->app['router']->any('type/{type}', LunaController::class . '@typeRetrieve')->name('type-retrieve');
-                        $this->app['router']->post('action/{action}', LunaController::class . '@action')->name('action');
-                        $this->app['router']->get('metric/{metric}', LunaController::class . '@metric')->name('metric');
+                    $this->app['router']->post('create', LunaResourceController::class . '@create')->name('create');
 
-                        $this->app['router']->post('create', LunaController::class . '@create')->name('create');
+                    $this->app['router']->group(['prefix' => '{luna_resource_id}'], function () {
+                        $this->app['router']->get('/', LunaResourceController::class . '@details')->name('details');
+                        $this->app['router']->get('edit', LunaResourceController::class . '@edit')->name('edit');
+                        $this->app['router']->post('update', LunaResourceController::class . '@update')->name('update');
+                        $this->app['router']->post('destroy', LunaResourceController::class . '@destroy')->name('destroy');
 
-                        $this->app['router']->group(['prefix' => '{luna_resource_id}'], function () {
-                            $this->app['router']->get('/', LunaController::class . '@details')->name('details');
-                            $this->app['router']->get('edit', LunaController::class . '@edit')->name('edit');
-                            $this->app['router']->post('update', LunaController::class . '@update')->name('update');
-                            $this->app['router']->post('destroy', LunaController::class . '@destroy')->name('destroy');
-
-                            $this->app['router']->any('type/{type}', LunaController::class . '@typeAction')->name('type-action');
-                        });
+                        $this->app['router']->any('type/{type}', LunaResourceController::class . '@typeAction')->name('type-action');
                     });
+                });
+
+                $this->app['router']->group([
+                    'as' => 'views.',
+                    'prefix' => '{luna_view}',
+                    'middleware' => [AccessView::class]
+                ], function () {
+                    $this->app['router']->get('/', LunaViewController::class . '@render')->name('render');
                 });
             });
         }
@@ -86,11 +91,11 @@ class LunaServiceProvider extends ServiceProvider
         $mode = config('luna.resources.mode', 'auto');
 
         if (!in_array($mode, ['auto', 'manual'])) {
-            throw new \Exception("Luna resource register mode [{$mode}] is not valide.");
+            throw new \Exception("Luna resource register mode [{$mode}] is not valid.");
         }
 
         if ($mode == 'auto') {
-            $path = config('luna.resources.auto', app_path('App\\Luna\\Resources\\'));
+            $path = config('luna.resources.auto', 'App\\Luna\\Resources\\');
             $this->app['luna']->setResources(ClassFinder::getClassesInNamespace($path, ClassFinder::RECURSIVE_MODE));
         }
 
@@ -103,6 +108,24 @@ class LunaServiceProvider extends ServiceProvider
     private function registerTools()
     {
         // $this->app['luna']->setTools($this->tools());
+    }
+
+    private function registerViews()
+    {
+        $mode = config('luna.views.mode', 'auto');
+
+        if (!in_array($mode, ['auto', 'manual'])) {
+            throw new \Exception("Luna views register mode [{$mode}] is not valid.");
+        }
+
+        if ($mode == 'auto') {
+            $path = config('luna.views.auto', 'App\\Luna\\Views\\');
+            $this->app['luna']->setViews(ClassFinder::getClassesInNamespace($path, ClassFinder::RECURSIVE_MODE));
+        }
+
+        if ($mode == 'manual') {
+            $this->app['luna']->setViews(config('luna.views.manual', []));
+        }
     }
 
     private function registerMenu()
