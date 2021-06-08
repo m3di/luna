@@ -18,6 +18,7 @@ abstract class Type
     protected $title;
     protected $type;
     protected $help = false;
+    protected $default = null;
 
     protected $columnName = null;
 
@@ -94,6 +95,11 @@ abstract class Type
     function help($help)
     {
         $this->help = $help;
+        return $this;
+    }
+
+    function default($default) {
+        $this->default = $default;
         return $this;
     }
 
@@ -317,6 +323,7 @@ abstract class Type
             'name' => $this->getName(),
             'title' => $this->getTitle(),
             'help' => $this->help,
+            'default' => $this->default,
             'type' => $this->type,
             'filterable' => $this->isFilterable(),
             'sortable' => $this->isSortable(),
