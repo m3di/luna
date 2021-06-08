@@ -209,12 +209,16 @@ class Luna
     function exportIndexPage()
     {
         if (config('luna.index_page.type') == 'resource') {
-            $name = $this->getResource(config('luna.index_page.resource'))->getName();
+            try {
+                $name = $this->getResource(config('luna.index_page.resource'))->getName();
 
-            return [
-                'type' => 'resource',
-                'resource' => $name
-            ];
+                return [
+                    'type' => 'resource',
+                    'resource' => $name
+                ];
+            } catch (\ReflectionException $e) {
+
+            }
         }
 
         return null;
