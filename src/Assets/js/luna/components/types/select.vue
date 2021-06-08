@@ -3,7 +3,8 @@
     <template v-if="displayType == 1">
       <small>
                 <span class="mx-1" v-for="(val, key) in field.options">
-                    <i class="fa fa-circle text-success" v-if="values[field.name] == key"></i>
+                    <i class="fa fa-circle text-success"
+                       v-if="(field.multiple && values[field.name] && values[field.name].includes(key)) || (values[field.name] == key)"></i>
                     <i class="fa fa-circle text-danger" v-else></i>
                 </span>
       </small>
@@ -14,8 +15,17 @@
       </div>
 
       <div :class="frameClass">
-                <span v-text="field.options[values[field.name]]"
-                      v-if="field.options.hasOwnProperty(values[field.name])"></span>
+        <template v-if="field.multiple">
+          <div v-for="v in values[field.name]">
+            <span v-text="field.options[v]"
+                  v-if="field.options.hasOwnProperty(v)"></span>
+          </div>
+        </template>
+        <template v-else>
+          <span v-text="field.options[values[field.name]]"
+                v-if="field.options.hasOwnProperty(values[field.name])"></span>
+        </template>
+
         <slot name="empty" v-else></slot>
       </div>
     </div>
