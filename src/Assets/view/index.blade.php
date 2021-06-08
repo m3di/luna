@@ -11,14 +11,14 @@
         window.user = JSON.parse('@json(auth()->user())');
 
         @if(auth()->check())
-            window.luna = JSON.parse('@json(Luna::export())');
-            window.lang = JSON.parse('@json(__('luna'))');
+            window.luna = @json(Luna::export());
+        window.lang = @json(__('luna'));
         @endif
     </script>
     <script src="/luna/js/index.js" defer></script>
 </head>
-<body>
-<div id="app" class="rtl" style="display: none">
+<body class="rtl">
+<div id="app" style="display: none">
     <nav class="navbar navbar-dark bg-dark navbar-expand-md fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url('/') }}">
@@ -60,40 +60,18 @@
         <div class="row justify-content-center">
             <nav class="col-md-3 col-lg-2 sidebar">
                 <div class="sidebar-sticky">
-
-                    <div class="p-2 mx-2 mb-1 sidebar-heading border rounded">
-                        <h6 class="p-0 m-0 d-flex justify-content-start align-items-center">
-                            <i class="fa fa-database mr-2"></i>
-                            <span>منابع</span>
-                        </h6>
-                    </div>
-
-                    <ul class="nav flex-column mb-1">
-                        <li class="nav-item" v-for="resource in resources" v-if="resource.visible">
-                            <router-link class="nav-link"
-                                         :to="{name: 'resources', params: {resource: resource.name}}">
-                                <span v-html="resource.plural"></span>
-                            </router-link>
-                        </li>
-                    </ul>
-
-                    <div v-if="Object.keys(tools).length > 0">
-                        <div class="p-2 mx-2 mb-1 sidebar-heading border rounded">
-                            <h6 class="p-0 m-0 d-flex justify-content-start align-items-center">
-                                <i class="fa fa-puzzle-piece mr-2"></i>
-                                <span>افزونه ها</span>
-                            </h6>
+                    <div class="user d-flex align-items-start">
+                        <div class="avatar">
+                            <img
+                                    src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim(auth()->user()->email))) }}?s=40"
+                                    alt="">
                         </div>
-
-                        <ul class="nav flex-column">
-                            <li class="nav-item" v-for="tool in tools">
-                                <router-link class="nav-link"
-                                             :to="{name: 'tools', params: {name: tool.name}}">
-                                    <span v-html="tool.title"></span>
-                                </router-link>
-                            </li>
-                        </ul>
+                        <div>
+                            <div class="username">{{ auth()->user()->name }}</div>
+                            <div class="title">{{ auth()->user()->email }}</div>
+                        </div>
                     </div>
+                    <luna-menu></luna-menu>
                 </div>
             </nav>
 
