@@ -6,9 +6,10 @@ namespace Luna\Types;
 class Select extends Type
 {
     protected $type = 'select';
+    protected $multiple = false;
 
     protected $options = [];
-    
+
     /**
      * @return static
      */
@@ -23,10 +24,17 @@ class Select extends Type
         return $this;
     }
 
+    function multiple($multiple = true)
+    {
+        $this->multiple = $multiple;
+        return $this;
+    }
+
     function export()
     {
         return parent::export() + [
                 'options' => $this->options,
+                'multiple' => $this->multiple,
             ];
     }
 }

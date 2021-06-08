@@ -27,27 +27,30 @@
                v-html="field.title"></label>
 
         <div :class="frameClass">
-          <select class="custom-select"
-                  :class="{'is-invalid': validationState == false}"
-                  :id="`__input__${field.name}`"
-                  :name="field.name"
-                  v-model="values[field.name]"
-                  @change="clearValidationErrors">
-            <option :value="null"></option>
-            <option v-for="(value, key) in field.options" :value="key" v-text="value"></option>
-          </select>
-
-          <!--
-          <div class="custom-control custom-radio" v-for="(value, key) in field.options">
-            <input type="radio" :id="`__input__${field.name}_${key}`" :name="`__input__${field.name}`"
-                   class="custom-control-input" :value="key" v-model="values[field.name]"
-                   @change="clearValidationErrors">
-            <label class="custom-control-label" :for="`__input__${field.name}_${key}`"
-                   v-text="value"></label>
-          </div>
-          -->
-
-          <div class="invalid-feedback" v-html="validationErrors"></div>
+          <template v-if="field.multiple">
+            <b-form-checkbox-group
+                id="`__input__${field.name}`"
+                v-model="values[field.name]"
+                :options="optionsObject"
+                :name="field.name"
+                @change="clearValidationErrors"
+                stacked
+            >
+            </b-form-checkbox-group>
+          </template>
+          <template v-else>
+            <select class="custom-select"
+                    :class="{'is-invalid': validationState == false}"
+                    :id="`__input__${field.name}`"
+                    :name="field.name"
+                    v-model="values[field.name]"
+                    @change="clearValidationErrors">
+              <option :value="null"></option>
+              <option v-for="(value, key) in field.options" :value="key" v-text="value"></option>
+            </select>
+          </template>
+          <div class="invalid-feedback d-block mt-3" v-if="validationState === false"
+               v-html="validationErrors"></div>
         </div>
       </div>
     </div>
@@ -58,5 +61,18 @@ import lunaType from '../../mixins/input'
 
 export default {
   mixins: [lunaType],
+  computed: {
+    optionsObject() {
+      return _.reduce(this.field.options, (carry, item, index) => {
+        carry.push({text: item, value: index})
+        return carry
+      }, [])
+    }
+  },
+  mounted() {
+    if (this.field.multiple && !Array.isArray(this.value)) {
+      this.$set(this.values, this.field.name, [])
+    }
+  }
 }
 </script>
