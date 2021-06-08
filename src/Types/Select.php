@@ -3,6 +3,8 @@
 namespace Luna\Types;
 
 
+use Illuminate\Database\Eloquent\Model;
+
 class Select extends Type
 {
     protected $type = 'select';
@@ -28,6 +30,15 @@ class Select extends Type
     {
         $this->multiple = $multiple;
         return $this;
+    }
+
+    function extractValueFromModel(Model $model, $columnName = null, $pivot = false)
+    {
+        $v = parent::extractValueFromModel($model, $columnName, $pivot);
+        if ($this->multiple && !is_array($v)) {
+            $v = json_decode($v);
+        }
+        return $v;
     }
 
     function export()

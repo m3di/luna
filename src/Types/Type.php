@@ -60,7 +60,8 @@ abstract class Type
         return $this->resource;
     }
 
-    function name($name) {
+    function name($name)
+    {
         $this->name = $name;
         return $this;
     }
@@ -98,7 +99,8 @@ abstract class Type
         return $this;
     }
 
-    function default($default) {
+    function default($default)
+    {
         $this->default = $default;
         return $this;
     }
@@ -259,13 +261,13 @@ abstract class Type
     function resolveFor(Model $model, $pivot = false)
     {
         if (is_null($this->resolver))
-            return $pivot ? $model->pivot->getAttribute($this->columnName) : $model->getAttribute($this->columnName);
+            return $this->extractValueFromModel($model, null, $pivot);
 
         if (is_string($this->resolver))
-            return $pivot ? $model->pivot->getAttribute($this->resolver) : $model->getAttribute($this->resolver);
+            return $this->extractValueFromModel($model, $this->resolver, $pivot);
 
         return call_user_func_array($this->resolver, [
-            $pivot ? $model->pivot->getAttribute($this->columnName) : $model->getAttribute($this->columnName),
+            $this->extractValueFromModel($model, null, $pivot),
             $model,
             $pivot
         ]);
@@ -277,10 +279,10 @@ abstract class Type
             return $this->resolveFor($model, $pivot);
 
         if (is_string($this->presenter))
-            return $pivot ? $model->pivot->getAttribute($this->presenter) : $model->getAttribute($this->presenter);
+            return $this->extractValueFromModel($model, $this->presenter, $pivot);
 
         return call_user_func_array($this->presenter, [
-            $pivot ? $model->pivot->getAttribute($this->columnName) : $model->getAttribute($this->columnName),
+            $this->extractValueFromModel($model, null, $pivot),
             $model,
             $pivot
         ]);
@@ -300,6 +302,15 @@ abstract class Type
         return $this->getColumnName() ? [
             $this->getColumnName() => $request->get($this->name),
         ] : [];
+    }
+
+    function extractValueFromModel(Model $model, $columnName = null, $pivot = false)
+    {
+        if (is_null($columnName)) {
+            $columnName = $this->columnName;
+        }
+
+        return $pivot ? $model->pivot->getAttribute($columnName) : $model->getAttribute($columnName);
     }
 
     function applyFilterToBuilder($query, $value)

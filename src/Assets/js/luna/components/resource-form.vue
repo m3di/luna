@@ -150,7 +150,7 @@ export default {
       }, {});
 
       for (let f of this.visibleFields) {
-        if (f.default !== null) {
+        if (!this.values.hasOwnProperty(f.name) && f.default !== null) {
           this.$set(this.values, f.name, f.default)
         }
       }

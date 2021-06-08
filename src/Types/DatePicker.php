@@ -29,7 +29,7 @@ class DatePicker extends Type
     {
         parent::__construct($name);
 
-        $rule = function() {
+        $rule = function () {
             return function ($attribute, $value, $fail) {
                 if (Carbon::createFromIsoFormat($this->format, $value)->isoFormat($this->format) !== $value) {
                     $fail(trans('validation.date_format', [
@@ -41,10 +41,6 @@ class DatePicker extends Type
         };
 
         $this->inheritedRules[] = (new RuleGenerator())->creation($rule)->update($rule);
-
-        $this->resolver = function ($value) {
-            return is_null($value) ? null : Carbon::createFromTimeString($value)->isoFormat($this->format);
-        };
     }
 
     function extractValuesFromRequest(Request $request, ?Model $model = null)
@@ -55,6 +51,13 @@ class DatePicker extends Type
             $this->getColumnName() => is_null($value) ? null : Carbon::createFromIsoFormat($this->format, $value),
         ] : [];
     }
+
+    function extractValueFromModel(Model $model, $columnName = null, $pivot = false)
+    {
+        $v = parent::extractValueFromModel($model, $columnName, $pivot);
+        return is_null($v) ? null : Carbon::createFromTimeString($v)->isoFormat($this->format);
+    }
+
 
     function export()
     {
@@ -72,37 +75,44 @@ class DatePicker extends Type
         return $this;
     }
 
-    function jalali() {
+    function jalali()
+    {
         $this->locale = 'fa';
         return $this;
     }
 
-    function georgian() {
+    function georgian()
+    {
         $this->locale = 'en';
         return $this;
     }
 
-    function hybrid() {
+    function hybrid()
+    {
         $this->locale = 'fa,en';
         return $this;
     }
 
-    function yearOnly() {
+    function yearOnly()
+    {
         $this->v_type = 'year';
         return $this;
     }
 
-    function yearMonthOnly() {
+    function yearMonthOnly()
+    {
         $this->v_type = 'year-month';
         return $this;
     }
 
-    function withTime() {
+    function withTime()
+    {
         $this->v_type = 'year-month';
         return $this;
     }
 
-    function fullDate() {
+    function fullDate()
+    {
         $this->v_type = 'date';
         return $this;
     }

@@ -18,26 +18,6 @@ class View extends Type
     protected $view;
     protected $mapping;
 
-    function __construct($name)
-    {
-        parent::__construct($name);
-
-        $this->presenter = function ($value, $model) {
-            return view($this->view, array_merge(
-                ['model' => $model],
-                call_user_func($this->mapping, $model)
-            ))->render();
-        };
-
-        $this->resolver = function () {
-            return '';
-        };
-
-        $this->mapping = function () {
-            return [];
-        };
-    }
-
     /**
      * @return static
      */
@@ -66,5 +46,13 @@ class View extends Type
     function extractValuesFromRequest(Request $request, ?Model $model = null)
     {
 
+    }
+
+    function extractValueFromModel(Model $model, $columnName = null, $pivot = false)
+    {
+        return view($this->view, array_merge(
+            ['model' => $model],
+            $this->mapping ? call_user_func($this->mapping, $model) : []
+        ))->render();
     }
 }
