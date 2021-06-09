@@ -147,7 +147,6 @@ class LunaResourceController extends BaseController
 
         $fields = $resource->visibleFieldsOnCreate();
         $model = new $resource->model();
-        $resource->fireCreating($request, $model);
 
         $afterSaveJobs = [];
         $appendJob = function (\Closure $job) use (&$afterSaveJobs) {
@@ -158,6 +157,7 @@ class LunaResourceController extends BaseController
             $field->fillFromRequest($request, $model, $appendJob);
         }
 
+        $resource->fireCreating($request, $model);
         $model->save();
 
         foreach ($afterSaveJobs as $job) {
@@ -214,7 +214,6 @@ class LunaResourceController extends BaseController
         }
 
         $this->validate($request, $resource->getUpdateRules($model), $resource->getRulesMessages(), $resource->getRulesAttributes());
-        $resource->fireUpdating($request, $model);
 
         $fields = $resource->visibleFieldsOnEdit();
 
@@ -227,6 +226,7 @@ class LunaResourceController extends BaseController
             $field->fillFromRequest($request, $model, $appendJob);
         }
 
+        $resource->fireUpdating($request, $model);
         $model->save();
 
         foreach ($afterSaveJobs as $job) {
