@@ -12,7 +12,7 @@
 
         @if(auth()->check())
             window.luna = @json(Luna::export());
-        window.lang = @json(__('luna'));
+            window.lang = @json(__('luna'));
         @endif
     </script>
     <script src="/luna/js/index.js" defer></script>
