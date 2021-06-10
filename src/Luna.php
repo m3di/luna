@@ -217,7 +217,6 @@ class Luna
                     'resource' => $name
                 ];
             } catch (\ReflectionException $e) {
-
             }
         }
 

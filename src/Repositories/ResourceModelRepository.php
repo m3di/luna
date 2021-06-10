@@ -3,6 +3,7 @@
 namespace Luna\Repositories;
 
 
+use Illuminate\Support\Collection;
 use Luna\Resources\Resource;
 use Luna\Types\Relation;
 use Luna\Types\Type;
@@ -63,7 +64,27 @@ class ResourceModelRepository
     function fields($fields)
     {
         $this->fields = $fields;
+        $this->query->select($this->getColNames($fields));
         return $this;
+    }
+
+    protected function getColNames($fields)
+    {
+        if (empty($fields)) {
+            return '*';
+        }
+
+        $tableName = $this->query instanceof \Illuminate\Database\Eloquent\Relations\Relation ? $this->query->getQuery()->getQuery()->from : $this->query->getQuery()->from;
+
+        return collect($fields)->reduce(function (Collection $carry, Type $type) {
+            $c = $type->getColumnName();
+            if ($c === false)
+                return $carry;
+            $carry[] = $c;
+            return $carry;
+        }, collect())->unique()->map(function ($field) use ($tableName) {
+            return strpos($field, '.') === false ? "{$tableName}.$field" : $field;
+        })->all();
     }
 
     function filters($filters)

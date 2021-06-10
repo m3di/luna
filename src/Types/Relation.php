@@ -9,6 +9,7 @@ abstract class Relation extends Type
 {
     protected $relation = null;
     protected $relation_resource = null;
+    protected $columnName = false;
 
     function getRelation()
     {
@@ -26,7 +27,6 @@ abstract class Relation extends Type
     function relation($relation)
     {
         $this->relation = $relation;
-        $this->columnName = null;
         return $this;
     }
 

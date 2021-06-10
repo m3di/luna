@@ -30,12 +30,11 @@ class BelongsTo extends Relation
                 $fail(trans('validation.exists', ['attribute' => $this->getRelationResource()->getSingular()]));
             }
         };
+    }
 
-        $this->resolveUsing(function ($val, ?Model $model, $pivot) {
-            return $this->resolveForRelatedModel($model->getRelation($this->getRelation()));
-        })->displayUsing(function ($val, ?Model $model, $pivot) {
-            return $this->displayForRelatedModel($model->getRelation($this->getRelation()));
-        });
+    public function extractValueFromModel(Model $model, $columnName = null, $pivot = false)
+    {
+        return $this->displayForRelatedModel($model->getRelation($this->getRelation()));
     }
 
     function linkToRelated()
@@ -82,8 +81,7 @@ class BelongsTo extends Relation
     {
         return (new static($relation))
             ->relation($relation)
-            ->relationResource($resource)
-            ->columnName($relation);
+            ->relationResource($resource);
     }
 
     function getTitle()
