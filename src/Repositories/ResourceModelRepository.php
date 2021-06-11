@@ -77,7 +77,11 @@ class ResourceModelRepository
         $tableName = $this->query instanceof \Illuminate\Database\Eloquent\Relations\Relation ? $this->query->getQuery()->getQuery()->from : $this->query->getQuery()->from;
 
         return collect($fields)->reduce(function (Collection $carry, Type $type) {
-            $c = $type->getColumnName();
+            if ($type instanceof Relation) {
+                $c = call_user_func($this->query->getModel(), $type->getRelation())->getForeignKeyName();
+            } else {
+                $c = $type->getColumnName();
+            }
             if ($c === false)
                 return $carry;
             $carry[] = $c;
