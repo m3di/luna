@@ -3,6 +3,7 @@
 namespace Luna\Types;
 
 
+use Illuminate\Database\Eloquent\Builder;
 use Luna\Resources\Resource;
 
 abstract class Relation extends Type
@@ -35,6 +36,8 @@ abstract class Relation extends Type
         $this->relation_resource = $resource;
         return $this;
     }
+
+    abstract function getLocalKeyName($query);
 
     function export()
     {

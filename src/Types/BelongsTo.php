@@ -205,5 +205,12 @@ class BelongsTo extends Relation
             ] + parent::export();
     }
 
-
+    /**
+     * @param Builder|\Illuminate\Database\Eloquent\Relations\Relation $query
+     * @return mixed
+     */
+    function getLocalKeyName($query)
+    {
+        return call_user_func([$query->getModel(), $this->getRelation()])->getForeignKeyName();
+    }
 }

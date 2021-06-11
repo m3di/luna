@@ -3,6 +3,7 @@
 namespace Luna\Types;
 
 
+use Illuminate\Database\Eloquent\Builder;
 use Luna\Panels\Panel;
 use Luna\Panels\PanelSimple;
 use Luna\Repositories\ResourceModelRepository;
@@ -89,7 +90,8 @@ class HasMany extends Relation
         return $this;
     }
 
-    function noSearch() {
+    function noSearch()
+    {
         $this->search = false;
         return $this;
     }
@@ -266,5 +268,14 @@ class HasMany extends Relation
     private function actionMetric($request, $resource, $model, $metric)
     {
         return $this->getMetric($metric)->handelRequest($request, $resource, $model);
+    }
+
+    /**
+     * @param Builder|\Illuminate\Database\Eloquent\Relations\Relation $query
+     * @return mixed
+     */
+    function getLocalKeyName($query)
+    {
+        return call_user_func([$query->getModel(), $this->getRelation()])->getOwnerKeyName();
     }
 }
