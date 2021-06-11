@@ -4,6 +4,7 @@ namespace Luna\Repositories;
 
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
 use Luna\Resources\Resource;
@@ -159,6 +160,10 @@ class ResourceModelRepository
 
         if ($relation instanceof HasManyThrough) {
             return $relation->getLocalKeyName();
+        }
+
+        if ($relation instanceof BelongsToMany) {
+            return $relation->getParentKeyName();
         }
     }
 }
