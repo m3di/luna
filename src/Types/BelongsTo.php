@@ -204,13 +204,4 @@ class BelongsTo extends Relation
                 'dependencies' => $this->dependencies,
             ] + parent::export();
     }
-
-    /**
-     * @param Builder|\Illuminate\Database\Eloquent\Relations\Relation $query
-     * @return mixed
-     */
-    function getLocalKeyName($query)
-    {
-        return call_user_func([$query->getModel(), $this->getRelation()])->getForeignKeyName();
-    }
 }

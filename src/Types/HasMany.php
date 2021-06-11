@@ -269,13 +269,4 @@ class HasMany extends Relation
     {
         return $this->getMetric($metric)->handelRequest($request, $resource, $model);
     }
-
-    /**
-     * @param Builder|\Illuminate\Database\Eloquent\Relations\Relation $query
-     * @return mixed
-     */
-    function getLocalKeyName($query)
-    {
-        return call_user_func([$query->getModel(), $this->getRelation()])->getOwnerKeyName();
-    }
 }

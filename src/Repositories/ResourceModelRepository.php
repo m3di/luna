@@ -3,8 +3,11 @@
 namespace Luna\Repositories;
 
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
 use Luna\Resources\Resource;
+use Luna\Types\HasMany;
 use Luna\Types\Relation;
 use Luna\Types\Type;
 use Illuminate\Database\Eloquent\Builder;
@@ -77,7 +80,7 @@ class ResourceModelRepository
         $tableName = $this->query instanceof \Illuminate\Database\Eloquent\Relations\Relation ? $this->query->getQuery()->getQuery()->from : $this->query->getQuery()->from;
 
         return collect($fields)->reduce(function (Collection $carry, Type $type) {
-            $c = $type instanceof Relation ? $type->getLocalKeyName($this->query) : $type->getColumnName();
+            $c = $type instanceof Relation ? $this->extractRelationColumnName($type) : $type->getColumnName();
 
             if ($c === false)
                 return $carry;
@@ -140,5 +143,22 @@ class ResourceModelRepository
         }
 
         return $this->query->with($relations);
+    }
+
+    protected function extractRelationColumnName(Relation $type)
+    {
+        $relation = call_user_func([$this->query->getModel(), $type->getRelation()]);
+
+        if ($relation instanceof BelongsTo) {
+            return $relation->getForeignKeyName();
+        }
+
+        if ($relation instanceof \Illuminate\Database\Eloquent\Relations\HasMany) {
+            return $relation->getLocalKeyName();
+        }
+
+        if ($relation instanceof HasManyThrough) {
+            return $relation->getLocalKeyName();
+        }
     }
 }

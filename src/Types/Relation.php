@@ -37,8 +37,6 @@ abstract class Relation extends Type
         return $this;
     }
 
-    abstract function getLocalKeyName($query);
-
     function export()
     {
         $resource = $this->getRelationResource();
