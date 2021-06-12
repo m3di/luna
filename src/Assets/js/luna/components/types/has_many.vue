@@ -11,7 +11,7 @@
                          :param-prefix="`${field.name}_`"
                          :fields="visibleFields"
                          :create-enable="field.create"
-                         :create-text="`ایجاد ${rSingular}`"
+                         :create-text="field.create_text || `ایجاد ${rSingular}`"
                          :details-enable="field.details"
                          :edit-enable="field.edit"
                          :remove-enable="field.delete"

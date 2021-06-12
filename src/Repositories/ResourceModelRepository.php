@@ -6,6 +6,7 @@ namespace Luna\Repositories;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Luna\Resources\Resource;
 use Luna\Types\HasMany;
@@ -149,6 +150,10 @@ class ResourceModelRepository
     protected function extractRelationColumnName(Relation $type)
     {
         $relation = call_user_func([$this->query->getModel(), $type->getRelation()]);
+
+        if ($relation instanceof HasOne) {
+            return $relation->getLocalKeyName();
+        }
 
         if ($relation instanceof BelongsTo) {
             return $relation->getForeignKeyName();

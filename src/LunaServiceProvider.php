@@ -10,6 +10,7 @@ use Luna\Middleware\AccessResource;
 use Luna\Middleware\AccessView;
 use Luna\Middleware\BootLuna;
 use Illuminate\Support\ServiceProvider;
+use Symfony\Component\ClassLoader\ClassMapGenerator;
 
 class LunaServiceProvider extends ServiceProvider
 {
@@ -95,8 +96,8 @@ class LunaServiceProvider extends ServiceProvider
         }
 
         if ($mode == 'auto') {
-            $path = config('luna.resources.auto', 'App\\Luna\\Resources\\');
-            $this->app['luna']->setResources(ClassFinder::getClassesInNamespace($path, ClassFinder::RECURSIVE_MODE));
+            $path = config('luna.resources.auto', app_path('luna/resources'));
+            $this->app['luna']->setResources(array_keys(ClassMapGenerator::createMap($path)));
         }
 
 
@@ -119,8 +120,8 @@ class LunaServiceProvider extends ServiceProvider
         }
 
         if ($mode == 'auto') {
-            $path = config('luna.views.auto', 'App\\Luna\\Views\\');
-            $this->app['luna']->setViews(ClassFinder::getClassesInNamespace($path, ClassFinder::RECURSIVE_MODE));
+            $path = config('luna.views.auto', storage_path('luna/views'));
+            $this->app['luna']->setViews(array_keys(ClassMapGenerator::createMap($path)));
         }
 
         if ($mode == 'manual') {

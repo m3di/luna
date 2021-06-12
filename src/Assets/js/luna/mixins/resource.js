@@ -11,6 +11,9 @@ export default {
         plural() {
             return this.$store.state.resources[this.resource].plural
         },
+        createText() {
+            return this.$store.state.resources[this.resource].create_text
+        },
         panels() {
             return this.$store.state.resources[this.resource].panels
         },

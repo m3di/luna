@@ -43,6 +43,8 @@ class HasMany extends Relation
     protected $searchables = null;
     protected $dependencies = [];
 
+    protected $createButtonText;
+
     function foreign($field)
     {
         $this->foreignField = $field;
@@ -196,6 +198,12 @@ class HasMany extends Relation
         return '';
     }
 
+    function createButtonText($text)
+    {
+        $this->createButtonText = $text;
+        return $this;
+    }
+
     function export()
     {
         return parent::export() + [
@@ -212,6 +220,7 @@ class HasMany extends Relation
                 'index_column' => $this->showIndexColumn,
                 'dependencies' => $this->dependencies,
                 'search' => $this->search,
+                'create_text' => $this->createButtonText,
             ];
     }
 

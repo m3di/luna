@@ -30,6 +30,7 @@ abstract class Resource
 
     protected $singular = null;
     protected $plural = null;
+    protected $createButtonText = null;
 
     protected $disableCreatePanel = false;
     protected $disableEditPanel = false;
@@ -233,6 +234,7 @@ abstract class Resource
             'visible' => $this->isVisible(),
             'singular' => $this->singular ?? str_singular($this->getName()),
             'plural' => $this->plural ?? str_plural($this->singular ?? str_singular($this->getName())),
+            'create_text' => $this->createButtonText,
             'primary_key' => $this->primary_key,
             'details' => !$this->disableDetailsPanel,
             'create' => !$this->disableCreatePanel,

@@ -42,6 +42,8 @@ class BelongsToMany extends Relation
     protected $search = false;
     protected $searchables = null;
 
+    protected $createButtonText;
+
     function __construct($name)
     {
         parent::__construct($name);
@@ -240,6 +242,12 @@ class BelongsToMany extends Relation
         return null;
     }
 
+    function createButtonText($text)
+    {
+        $this->createButtonText = $text;
+        return $this;
+    }
+
     function export()
     {
         return parent::export() + [
@@ -253,6 +261,7 @@ class BelongsToMany extends Relation
                 'detach' => !$this->disableDetachOption,
                 'index_column' => $this->showIndexColumn,
                 'search' => $this->search,
+                'create_text' => $this->createButtonText,
             ];
     }
 

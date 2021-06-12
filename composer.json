@@ -8,8 +8,8 @@
         }
     ],
     "require": {
-        "haydenpierce/class-finder": "^0.4.3",
-        "tightenco/ziggy": "^0.9"
+        "tightenco/ziggy": "^0.9",
+        "symfony/class-loader": "^3.4"
     },
     "autoload": {
         "psr-4": {

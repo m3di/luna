@@ -11,6 +11,8 @@ class ResourceLink extends Link
 {
 
     protected $resource;
+    protected $page = 'index';
+    protected $model = null;
     /**
      * @var Resource|null
      */
@@ -36,10 +38,32 @@ class ResourceLink extends Link
         return $this->getResourceObject()->getPlural();
     }
 
+    function toCreate()
+    {
+        $this->page = 'create';
+        return $this;
+    }
+
+    function toEdit($id)
+    {
+        $this->page = 'edit';
+        $this->model = $id;
+        return $this;
+    }
+
+    function toDetails($id)
+    {
+        $this->page = 'details';
+        $this->model = $id;
+        return $this;
+    }
+
     function export()
     {
         return parent::export() + [
                 'resource' => $this->getResourceObject()->getName(),
+                'page' => $this->page,
+                'model' => is_callable($this->model) ? call_user_func($this->model) : $this->model,
             ];
     }
 

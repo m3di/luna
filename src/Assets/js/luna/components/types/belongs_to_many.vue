@@ -12,7 +12,7 @@
                              :param-prefix="`${field.name}_`"
                              :fields="visibleFieldsOnIndex"
                              :create-enable="field.attach"
-                             :create-text="`پیوست ${rSingular}`"
+                             :create-text="field.create_text || `پیوست ${rSingular}`"
                              :details-enable="false"
                              :edit-enable="field.edit"
                              :remove-enable="field.detach"

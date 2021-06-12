@@ -10,7 +10,7 @@
                          :plural="plural"
                          :fields="visibleFields"
                          :createEnable="createEnable"
-                         :createText="`ایجاد ${singular}`"
+                         :createText="createText || `ایجاد ${singular}`"
                          :details-enable="detailsEnable"
                          :edit-enable="editEnable"
                          :remove-enable="removeEnable"
