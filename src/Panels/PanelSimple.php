@@ -7,6 +7,7 @@ class PanelSimple extends Panel
 {
     protected $name;
     protected $support;
+    protected $visible = true;
 
     function getType()
     {
@@ -24,11 +25,17 @@ class PanelSimple extends Panel
         return new static($name, $support);
     }
 
+    function defaultHidden() {
+        $this->visible = false;
+        return $this;
+    }
+
     function export()
     {
         return [
                 'name' => $this->name,
                 'support' => $this->support,
+                'visible' => $this->visible,
             ] + parent::export();
     }
 }

@@ -11,7 +11,7 @@
           </a>
         </div>
       </div>
-      <div :class="{'card-body py-0 collapse show': panel.support}" :id="'panel-body-' + index" ref="col">
+      <div :class="{'card-body py-0 collapse': panel.support, 'show': panel.support && display}" :id="'panel-body-' + index" ref="col">
         <div :class="{'border-top': panel.support && index > 0, 'py-4': panel.support}"
              v-for="(field, index) in visibleFields(panel.fields)">
           <component :is="'luna-type-' + field.type" :resource="resource" :field="field"
@@ -55,6 +55,9 @@ export default {
     },
   },
   mounted() {
+    if (!this.panel.visible)
+      this.display = false
+
     $(this.$refs['col']).on('hidden.bs.collapse', () => {
       this.display = false
     }).on('shown.bs.collapse', () => {
