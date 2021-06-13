@@ -17,6 +17,7 @@ class View extends Type
 
     protected $view;
     protected $mapping;
+    protected $columnName = false;
 
     /**
      * @return static
