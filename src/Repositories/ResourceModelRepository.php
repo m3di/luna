@@ -89,9 +89,9 @@ class ResourceModelRepository
 
             $carry[] = $c;
             return $carry;
-        }, collect())->unique()->map(function ($field) use ($tableName) {
+        }, collect($this->resource->getExtraColumns()))->unique()->map(function ($field) use ($tableName) {
             return strpos($field, '.') === false ? "{$tableName}.$field" : $field;
-        })->all();
+        })->unique()->all();
     }
 
     function filters($filters)

@@ -40,6 +40,8 @@ abstract class Resource
     protected $showIndexColumn = false;
     protected $defaultSort = null;
 
+    protected $extraColumns = [];
+
     function __construct()
     {
         $this->primary_key = (new $this->model)->getKeyName();
@@ -361,5 +363,10 @@ abstract class Resource
     public function getDefaultSort()
     {
         return $this->defaultSort;
+    }
+
+    public function getExtraColumns()
+    {
+        return $this->extraColumns;
     }
 }
