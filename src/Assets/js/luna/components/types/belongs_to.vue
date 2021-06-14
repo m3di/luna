@@ -138,7 +138,7 @@ export default {
   },
   created() {
     if (this.displayType == 3 && this.values[this.field.name]) {
-      this.fetchSelected(this.values[this.field.name].id)
+      this.fetchSelected(this.values[this.field.name])
     }
   }
 }
