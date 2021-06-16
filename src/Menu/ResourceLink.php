@@ -9,7 +9,7 @@ use Luna\Resources\Resource;
 
 class ResourceLink extends Link
 {
-
+    protected $title = null;
     protected $resource;
     protected $page = 'index';
     protected $model = null;
@@ -18,12 +18,13 @@ class ResourceLink extends Link
      */
     protected $temp = null;
 
-    function __construct($class)
+    function __construct($class, $title = null)
     {
         $this->resource = $class;
+        $this->title = $title;
     }
 
-    public static function make($class)
+    public static function make($class, $title = null)
     {
         return new static($class);
     }
@@ -35,7 +36,7 @@ class ResourceLink extends Link
 
     protected function getTitle()
     {
-        return $this->getResourceObject()->getPlural();
+        return $this->title ?? $this->getResourceObject()->getPlural();
     }
 
     function toCreate()

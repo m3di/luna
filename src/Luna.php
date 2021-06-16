@@ -5,7 +5,6 @@ namespace Luna;
 
 use Luna\Exceptions\NotRegistrableException;
 use Luna\Exceptions\NotRegisteredException;
-use Luna\Menu\Item;
 use Luna\Resources\Resource;
 use Luna\Tools\Tool;
 use Illuminate\Foundation\Application;
@@ -140,20 +139,7 @@ class Luna
 
     function setMenu($menu)
     {
-        $this->menu = [];
-
-        foreach ($menu as $item) {
-            $this->addMenu($item);
-        }
-    }
-
-    function addMenu(Item $item, $index = null)
-    {
-        if (is_null($index)) {
-            $this->menu[] = $item;
-        } else {
-            $this->menu[$index] = $item;
-        }
+        $this->menu = $menu;
     }
 
     function exportResources()
@@ -199,7 +185,9 @@ class Luna
     {
         $menu = [];
 
-        foreach ($this->menu as $item) {
+        $items = is_callable($this->menu) ? call_user_func($this->menu) : $this->menu;
+
+        foreach ($items as $item) {
             $menu[] = $item->export();
         }
 

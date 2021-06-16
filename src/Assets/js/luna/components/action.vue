@@ -83,25 +83,25 @@ export default {
         if (this.confirmationMessage) {
           this.runMessage(this.confirmationMessage).then((result) => {
             if (result.value) {
-              this.fire2()
+              this.fillAndProceed()
             }
           })
         } else {
-          this.fire2()
+          this.fillAndProceed()
         }
       }
     },
-    fire2() {
+    fillAndProceed() {
       if (this.fields && Object.keys(this.fields).length > 0) {
         this.openForm = true;
         this.$nextTick(() => {
           this.$refs['form'].show()
         })
       } else {
-        return this.fire3()
+        return this.sundHandleRequest()
       }
     },
-    fire3() {
+    sundHandleRequest() {
       return new Promise((resolve, reject) => {
         this.si({
           url: this.route('luna.resources.action.handle', [this.resource, this.idx]),
@@ -132,7 +132,7 @@ export default {
       })
     },
     submitAndReset() {
-      this.fire3().then(() => {
+      this.sundHandleRequest().then(() => {
         this.values = {}
         this.$refs['form'].hide()
       })
