@@ -113,14 +113,14 @@ abstract class Action
         ];
     }
 
-    public static function success($title, $text)
+    public static function success($title, $text, $refresh = false)
     {
-        return static::message(MessageWrapper::make($title, $text, 'بسیار خب!')->success());
+        return static::message(MessageWrapper::make($title, $text, 'بسیار خب!')->success(), $refresh);
     }
 
-    public static function error($title, $text)
+    public static function error($title, $text, $refresh = false)
     {
-        return static::message(MessageWrapper::make($title, $text, 'بسیار خب!')->error());
+        return static::message(MessageWrapper::make($title, $text, 'بسیار خب!')->error(), $refresh);
     }
 
     public static function redirect($url, $newTab = false)
