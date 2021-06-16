@@ -59,11 +59,16 @@ class LunaServiceProvider extends ServiceProvider
                     'prefix' => 'resources/{luna_resource}',
                     'middleware' => [AccessResource::class]
                 ], function () {
-                    $this->app['router']->get('paginate', LunaResourceController::class . '@paginate')->name('paginate');
                     $this->app['router']->any('type/{type}', LunaResourceController::class . '@typeRetrieve')->name('type-retrieve');
-                    $this->app['router']->post('action/{action}', LunaResourceController::class . '@action')->name('action');
                     $this->app['router']->get('metric/{metric}', LunaResourceController::class . '@metric')->name('metric');
 
+                    $this->app['router']->group(['as' => 'action.', 'prefix' => 'action/{action}'], function() {
+                        $this->app['router']->get('init', LunaResourceController::class . '@initAction')->name('init');
+                        $this->app['router']->post('handle', LunaResourceController::class . '@handleAction')->name('handle');
+                    });
+
+
+                    $this->app['router']->get('paginate', LunaResourceController::class . '@paginate')->name('paginate');
                     $this->app['router']->post('create', LunaResourceController::class . '@create')->name('create');
 
                     $this->app['router']->group(['prefix' => '{luna_resource_id}'], function () {

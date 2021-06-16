@@ -54,6 +54,19 @@ Vue.mixin({
         route: route,
         lang(key) {
             return window.lang[key]
+        },
+        runMessage(message) {
+            if (message) {
+                return this.$swal({
+                    title: message.title,
+                    text: message.text,
+                    type: message.icon,
+                    showCancelButton: message.cancelButton,
+                    confirmButtonText: message.buttonText,
+                    cancelButtonText: message.cancelButtonText,
+                    target: document.getElementById('app')
+                })
+            }
         }
     }
 });

@@ -1,10 +1,10 @@
 <template>
   <div>
     <slot :fire="fire"></slot>
-    <b-modal ref="form" :title="action.title" v-if="action.fields && openForm" hide-footer>
+    <b-modal ref="form" :title="action.title" v-if="fields && openForm" hide-footer>
       <ajax-form ref="ajaxForm" :custom-submit="true" @submit="submitAndReset">
         <div class="input-fields">
-          <template v-for="(field, index) in action.fields">
+          <template v-for="(field, index) in fields">
             <div class="py-2">
               <component :is="'luna-type-' + field.type"
                          :field="field"
@@ -51,6 +51,9 @@ export default {
     return {
       openForm: false,
       values: {},
+      fields: {},
+      isInited: false,
+      confirmationMessage: false,
     }
   },
   methods: {
@@ -58,20 +61,50 @@ export default {
       'error',
       'si',
     ]),
+    init() {
+      this.loading = true;
+      this.si({
+        url: this.route('luna.resources.action.init', [this.resource, this.idx]),
+        method: 'get',
+        data: {
+          models: this.models,
+        }
+      }).then(x => {
+        this.isInited = true
+        this.fields = x.fields
+        this.confirmationMessage = x.confirmation
+        this.fire()
+      })
+    },
     fire() {
-      if (this.action.fields && Object.keys(this.action.fields).length > 0) {
+      if (!this.isInited) {
+        this.init()
+      } else {
+        if (this.confirmationMessage) {
+          this.runMessage(this.confirmationMessage).then((result) => {
+            if (result.value) {
+              this.fire2()
+            }
+          })
+        } else {
+          this.fire2()
+        }
+      }
+    },
+    fire2() {
+      if (this.fields && Object.keys(this.fields).length > 0) {
         this.openForm = true;
         this.$nextTick(() => {
           this.$refs['form'].show()
         })
       } else {
-        return this.realFire()
+        return this.fire3()
       }
     },
-    realFire() {
+    fire3() {
       return new Promise((resolve, reject) => {
         this.si({
-          url: this.route('luna.resources.action', [this.resource, this.idx]),
+          url: this.route('luna.resources.action.handle', [this.resource, this.idx]),
           method: 'post',
           data: {
             ...this.values,
@@ -83,7 +116,7 @@ export default {
         }).catch(result => {
           if (result.hasOwnProperty('response') && result.response.status == 422) {
             if (result.response.hasOwnProperty('data')) {
-              if (result.response.data.hasOwnProperty('message')){
+              if (result.response.data.hasOwnProperty('message')) {
                 this.error({
                   title: 'خطا',
                   text: result.response.data.message,
@@ -99,20 +132,14 @@ export default {
       })
     },
     submitAndReset() {
-      this.realFire().then(() => {
+      this.fire3().then(() => {
         this.values = {}
         this.$refs['form'].hide()
       })
     },
     onSuccess(data) {
       if (data.action == 'message') {
-        this.$swal({
-          title: data.message.title,
-          text: data.message.text,
-          type: data.message.type,
-          confirmButtonText: 'خب!',
-          target: document.getElementById('app')
-        }).then(() => {
+        this.runMessage(data.message).then(() => {
           if (data.refresh) {
             window.location.reload()
           }
@@ -166,6 +193,11 @@ export default {
     isLoading() {
       return this.$store.state.loading
     },
+  },
+  watch: {
+    models() {
+      this.isInited = false
+    }
   }
 }
 </script>

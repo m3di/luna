@@ -17,7 +17,7 @@ use Luna;
 class LunaResourceController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    
+
     function __construct()
     {
         $this->middleware(function (Request $request, \Closure $next) {
@@ -277,13 +277,28 @@ class LunaResourceController extends BaseController
         return $type->handelActionRequest($request, $resource, $model);
     }
 
-    function action(Request $request, $resource, $action)
+    function initAction(Request $request, $resource, $action)
     {
         /** @var Resource $resource */
         $resource = luna::getResource($resource);
 
+        $models = $resource->getQuery()->findMany($request->get('models'));
+
         /** @var Action $action */
-        $action = $resource->getAction($action);
+        $action = $resource->getAction($action)->init($models);
+
+        return $action->exportInit();
+    }
+
+    function handleAction(Request $request, $resource, $action)
+    {
+        /** @var Resource $resource */
+        $resource = luna::getResource($resource);
+
+        $models = $resource->getQuery()->findMany($request->get('models'));
+
+        /** @var Action $action */
+        $action = $resource->getAction($action)->init($models);
 
         $fields = $action->getFields();
 
@@ -295,7 +310,7 @@ class LunaResourceController extends BaseController
             $data = $data + $field->extractValuesFromRequest($request, null);
         }
 
-        return $action->handel($data, $resource->getQuery()->findMany($request->get('models')));
+        return $action->handel($data, $models);
     }
 
     function metric(Request $request, $resource, $metricIndex)

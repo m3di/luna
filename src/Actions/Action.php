@@ -5,31 +5,46 @@ namespace Luna\Actions;
 
 use Luna\Types\Type;
 use Illuminate\Support\Collection;
+use Luna\Utilities\MessageWrapper;
 
 abstract class Action
 {
     protected $title;
     protected $fields = [];
-
-    function __construct()
-    {
-        foreach ($this->fields() as $field) {
-            $this->fields[$field->getName()] = $field;
-        }
-    }
+    /**
+     * @var null|MessageWrapper
+     */
+    protected $confirmation = null;
 
     public static function make()
     {
         return new static();
     }
 
+    /** @todo fix typo :| */
     public abstract function handel(array $fields, Collection $models);
 
-    public function fields()
+    public function init(Collection $models)
+    {
+        foreach ($this->fields($models) as $field) {
+            $this->fields[$field->getName()] = $field;
+        }
+
+        $this->confirmation = $this->confirmationMessage($models);
+
+        return $this;
+    }
+
+    public function fields(Collection $models)
     {
         return [
 
         ];
+    }
+
+    function confirmationMessage(Collection $models): ?MessageWrapper
+    {
+        return null;
     }
 
     function getFields()
@@ -64,7 +79,16 @@ abstract class Action
     {
         return [
             'title' => $this->title,
-            'fields' => array_map(function(Type $type){return $type->export();}, $this->getFields())
+        ];
+    }
+
+    function exportInit()
+    {
+        return [
+            'fields' => array_map(function (Type $type) {
+                return $type->export();
+            }, $this->getFields()),
+            'confirmation' => $this->confirmation ? $this->confirmation->export() : null,
         ];
     }
 
@@ -80,27 +104,23 @@ abstract class Action
         ];
     }
 
-    public static function message($title, $text, $type = 'info', $refresh = false)
+    public static function message(MessageWrapper $message, $refresh = false)
     {
         return [
             'action' => 'message',
-            'message' => [
-                'title' => $title,
-                'text' => $text,
-                'type' => $type,
-            ],
+            'message' => $message->export(),
             'refresh' => $refresh,
         ];
     }
 
     public static function success($title, $text)
     {
-        return static::message($title, $text, 'success');
+        return static::message(MessageWrapper::make($title, $text, 'بسیار خب!')->success());
     }
 
     public static function error($title, $text)
     {
-        return static::message($title, $text, 'error');
+        return static::message(MessageWrapper::make($title, $text, 'بسیار خب!')->error());
     }
 
     public static function redirect($url, $newTab = false)
