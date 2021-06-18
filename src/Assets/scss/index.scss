@@ -79,7 +79,7 @@ input.form-control {
  */
 
 .sidebar {
-  padding: 58px 0 10px; /* Height of navbar */
+  padding: 48px 0 10px; /* Height of navbar */
   background-color: rgb(75, 86, 101);
   box-shadow: inset 1px 0 0 rgba(255, 255, 255, .3);
 
@@ -160,7 +160,6 @@ input.form-control {
     bottom: 0;
     right: 0;
     z-index: 100; /* Behind the navbar */
-    padding: 48px 0 0; /* Height of navbar */
   }
 
   .sidebar-sticky {
@@ -178,15 +177,6 @@ input.form-control {
       position: sticky;
     }
   }
-
-  [role="main"] {
-    padding-top: 68px !important; /* Space for fixed navbar */
-  }
-}
-
-.sidebar-heading {
-  color: #fff;
-  text-transform: uppercase;
 }
 
 /*
@@ -195,6 +185,12 @@ input.form-control {
 
 [role="main"] {
   padding-top: 20px; /* Space for fixed navbar */
+}
+
+@media (min-width: 768px) {
+  [role="main"] {
+    padding-top: 68px !important; /* Space for fixed navbar */
+  }
 }
 
 /*
@@ -230,4 +226,50 @@ input.form-control {
 
 .nav-tabs .nav-link {
   border-color: #dee2e6;
+}
+
+// sidebar
+
+$border_color: #343a40;
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $border_color;
+  border: 0 none #ffffff;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $border_color;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: $border_color;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border: 0 none #ffffff;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-track:hover {
+  background: transparent;
+}
+
+::-webkit-scrollbar-track:active {
+  background: transparent;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
