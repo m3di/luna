@@ -62,9 +62,8 @@
                 <div class="sidebar-sticky">
                     <div class="user d-flex align-items-start">
                         <div class="avatar">
-                            <img
-                                    src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim(auth()->user()->email))) }}?s=40"
-                                    alt="">
+                            <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim(auth()->user()->email))) }}?s=40"
+                                 alt="">
                         </div>
                         <div>
                             <div class="username">{{ auth()->user()->name }}</div>
