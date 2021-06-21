@@ -198,11 +198,11 @@ class Luna
     {
         if (config('luna.index_page.type') == 'resource') {
             try {
-                $name = $this->getResource(config('luna.index_page.resource'))->getName();
+                $name = config('luna.index_page.resource');
 
                 return [
                     'type' => 'resource',
-                    'resource' => $name
+                    'resource' => $this->getResource(is_callable($name) ? call_user_func($name) : $name)->getName(),
                 ];
             } catch (\ReflectionException $e) {
             }
