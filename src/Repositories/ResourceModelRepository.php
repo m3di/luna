@@ -156,7 +156,7 @@ class ResourceModelRepository
         }
 
         if ($relation instanceof BelongsTo) {
-            return $relation->getForeignKeyName();
+            return $relation->getOwnerKeyName();
         }
 
         if ($relation instanceof \Illuminate\Database\Eloquent\Relations\HasMany) {
