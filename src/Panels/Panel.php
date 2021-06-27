@@ -17,7 +17,7 @@ abstract class Panel
     function fields($fields)
     {
         $fields = Luna::cic($fields);
-        foreach (call_user_func($fields) as $field) {
+        foreach ($fields as $field) {
             $this->appendField($field);
         }
         return $this;
