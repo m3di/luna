@@ -64,7 +64,7 @@ class LineChart extends Chart
         return $this;
     }
 
-    function dataLine($label, $extractor, $backgroundColor = null, $borderColor = null)
+    function y($label, $extractor, $backgroundColor = null, $borderColor = null)
     {
         $this->y_extractor[] = function ($model, $dbgc, $dbc) use ($label, $extractor, $backgroundColor, $borderColor) {
             $border = $borderColor ?? ($backgroundColor ? null : $dbc);
