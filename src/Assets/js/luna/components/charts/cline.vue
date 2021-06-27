@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      chartdata: {
+      chartData: {
         labels: this.x,
         datasets: this.ys
       },
@@ -36,7 +36,7 @@ export default {
     }
   },
   mounted() {
-    this.renderChart(this.chartdata, Object.assign({}, {
+    this.renderChart(this.chartData, Object.assign({}, {
       responsive: true,
       maintainAspectRatio: false
     }, this.opts))
