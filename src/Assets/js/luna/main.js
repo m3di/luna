@@ -26,6 +26,7 @@ import LunaTypeImage from './components/types/image'
 import LunaTypeRadio from './components/types/radio'
 import LunaTypeSelect from './components/types/select'
 import LunaTypeView from './components/types/view'
+import LunaTypeChart from './components/types/chart'
 
 import LunaMetric from './components/metrics/metric'
 import LunaMetricBar from './components/metrics/metric-bar'
@@ -66,6 +67,7 @@ export default {
         Vue.component('luna-type-radio', LunaTypeRadio);
         Vue.component('luna-type-select', LunaTypeSelect);
         Vue.component('luna-type-view', LunaTypeView);
+        Vue.component('luna-type-chart', LunaTypeChart);
 
         Vue.component('luna-metric', LunaMetric);
         Vue.component('luna-metric-bar', LunaMetricBar);

@@ -232,4 +232,15 @@ class Luna
     {
         return is_callable($callable) ? call_user_func_array($callable, $parameters) : $callable;
     }
+
+    /**
+     * call if callable
+     * @param $value
+     * @param ...$params
+     * @return false|mixed
+     */
+    function cic($value, ...$params)
+    {
+        return is_callable($value) ? call_user_func_array($value, $params) : $value;
+    }
 }
