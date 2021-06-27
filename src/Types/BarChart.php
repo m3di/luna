@@ -54,7 +54,7 @@ class BarChart extends Chart
                     'rgba(' . $this->colors[$i % count($this->colors)] . ',0.7)',
                     'rgb(' . $this->colors[$i % count($this->colors)] . ')',
                 ]);
-            }, $this->y_extractor, range(0, count($this->y_extractor) - 1)),
+            }, $this->y_extractor, array_keys($this->y_extractor)),
         ];
     }
 
