@@ -2,7 +2,12 @@
     <div class="mb-3">
         <luna-metric-bar :metrics="metrics" :url-generator="metricUrlGenerator"></luna-metric-bar>
 
-        <h4 v-text="plural" class="mb-3"></h4>
+        <h4 class="mb-3">
+          <span v-text="plural"></span>
+          <a :href="res.index_help_link" target="_blank" class="text-muted" v-if="res.index_help_link">
+            <small><i class="fa fa-question-circle"></i></small>
+          </a>
+        </h4>
 
         <luna-data-table ref="dataTable"
                          :resource="resource"

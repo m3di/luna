@@ -40,5 +40,8 @@ return [
 
     'ui' => [
         'action_buttons_text' => true,
+        'external_help_url_generator' => function ($tree) {
+            return false;
+        },
     ]
 ];

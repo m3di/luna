@@ -39,8 +39,12 @@ abstract class Resource
 
     protected $showIndexColumn = false;
     protected $defaultSort = null;
-
     protected $extraColumns = [];
+
+    protected $index_help_tree = null;
+    protected $details_help_tree = null;
+    protected $create_help_tree = null;
+    protected $edit_help_tree = null;
 
     function __construct()
     {
@@ -244,6 +248,10 @@ abstract class Resource
             'remove' => !$this->disableDeleteOption,
             'index_column' => $this->showIndexColumn,
             'search' => $this->search,
+            'index_help_link' => $this->index_help_tree ? Luna::helpTreeUrl($this->index_help_tree) : null,
+            'details_help_link' => $this->details_help_tree ? Luna::helpTreeUrl($this->details_help_tree) : null,
+            'create_help_link' => $this->create_help_tree ? Luna::helpTreeUrl($this->create_help_tree) : null,
+            'edit_help_link' => $this->edit_help_tree ? Luna::helpTreeUrl($this->edit_help_tree) : null,
         ];
 
         $export['panels'] = array_map(function (Panel $a) {

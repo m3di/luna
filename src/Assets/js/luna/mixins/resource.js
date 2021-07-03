@@ -5,6 +5,9 @@ export default {
             required: true,
         },
     }, computed: {
+        res() {
+            return this.$store.state.resources[this.resource]
+        },
         singular() {
             return this.$store.state.resources[this.resource].singular
         },

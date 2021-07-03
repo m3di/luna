@@ -243,4 +243,9 @@ class Luna
     {
         return is_callable($value) ? call_user_func_array($value, $params) : $value;
     }
+
+    function helpTreeUrl($tree)
+    {
+        return $this->cic(config('luna.ui.external_help_url_generator', null), $tree);
+    }
 }

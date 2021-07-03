@@ -7,7 +7,15 @@
         </button>
         <span class="text-muted mr-3">/</span>
       </div>
-      <h4 v-text="(model == null ? 'ایجاد' : 'ویرایش') + ' ' + singular" class="mb-0"></h4>
+      <h4 class="mb-0">
+        <span v-text="(model == null ? 'ایجاد' : 'ویرایش') + ' ' + singular"></span>
+        <a :href="res.create_help_link" target="_blank" class="text-muted" v-if="model == null && res.create_help_link">
+          <small><i class="fa fa-question-circle"></i></small>
+        </a>
+        <a :href="res.edit_help_link" target="_blank" class="text-muted" v-if="model != null && res.edit_help_link">
+          <small><i class="fa fa-question-circle"></i></small>
+        </a>
+      </h4>
     </div>
 
     <div v-if="ready">

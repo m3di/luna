@@ -8,7 +8,12 @@
                     </button>
                     <span class="text-muted mr-3">/</span>
                 </div>
-                <h4 v-text="'مشخصات ' + singular" class="mb-0"></h4>
+                <h4 class="mb-0">
+                  <span v-text="'مشخصات ' + singular"></span>
+                  <a :href="res.details_help_link" target="_blank" class="text-muted" v-if="res.details_help_link">
+                    <small><i class="fa fa-question-circle"></i></small>
+                  </a>
+                </h4>
             </div>
 
             <div>
