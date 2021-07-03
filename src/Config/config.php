@@ -13,6 +13,12 @@ return [
         'auth',
     ],
 
+    'ui' => [
+        'external_help_url_generator' => function ($tree) {
+            return false;
+        },
+    ],
+
     'resources' => [
         'mode' => 'auto', // or manual
 
@@ -37,11 +43,4 @@ return [
     'menu' => [
         \Luna\Menu\AllResources::make('منابع', 'fa fa-database'),
     ],
-
-    'ui' => [
-        'action_buttons_text' => true,
-        'external_help_url_generator' => function ($tree) {
-            return false;
-        },
-    ]
 ];
