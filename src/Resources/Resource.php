@@ -37,6 +37,7 @@ abstract class Resource
     protected $disableDetailsPanel = false;
     protected $disableDeleteOption = false;
 
+    protected $rearrange = false;
     protected $showIndexColumn = false;
     protected $defaultSort = null;
     protected $extraColumns = [];
@@ -252,6 +253,7 @@ abstract class Resource
             'details_help_link' => $this->details_help_tree ? Luna::helpTreeUrl($this->details_help_tree) : null,
             'create_help_link' => $this->create_help_tree ? Luna::helpTreeUrl($this->create_help_tree) : null,
             'edit_help_link' => $this->edit_help_tree ? Luna::helpTreeUrl($this->edit_help_tree) : null,
+            'rearrange' => $this->isRearrangeable(),
         ];
 
         $export['panels'] = array_map(function (Panel $a) {
@@ -368,9 +370,19 @@ abstract class Resource
     {
     }
 
+    public function isRearrangeable()
+    {
+        return $this->rearrange !== false;
+    }
+
+    public function getRearrange()
+    {
+        return $this->rearrange;
+    }
+
     public function getDefaultSort()
     {
-        return $this->defaultSort;
+        return $this->defaultSort ?? $this->getRearrange();
     }
 
     public function getExtraColumns()

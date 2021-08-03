@@ -4,6 +4,7 @@ namespace Luna\Types;
 
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Luna\Panels\Panel;
 use Luna\Panels\PanelSimple;
 use Luna\Repositories\ResourceModelRepository;
@@ -36,6 +37,7 @@ class HasMany extends Relation
     protected $disableDetailsLink = false;
     protected $disableDeleteLink = false;
 
+    protected $rearrange = false;
     protected $showIndexColumn = false;
 
     protected $query = null;
@@ -185,6 +187,14 @@ class HasMany extends Relation
             return $this->actionMetric($request, $resource, $model, $request->get('metric'));
         }
 
+        if ($this->isRearrangeable() && $request->method() == 'GET' && $request->get('action') == 'rearrange') {
+            return $this->actionRearrange($request, $resource, $model);
+        }
+
+        if ($this->isRearrangeable() && $request->method() == 'POST' && $request->get('action') == 'rearrange') {
+            return $this->actionDoRearrange($request, $resource, $model);
+        }
+
         return null;
     }
 
@@ -204,6 +214,17 @@ class HasMany extends Relation
         return $this;
     }
 
+    function withRearrange($rearrange)
+    {
+        $this->rearrange = $rearrange;
+        return $this;
+    }
+
+    public function isRearrangeable()
+    {
+        return $this->rearrange !== false;
+    }
+
     function export()
     {
         return parent::export() + [
@@ -221,6 +242,7 @@ class HasMany extends Relation
                 'dependencies' => $this->dependencies,
                 'search' => $this->search,
                 'create_text' => $this->createButtonText,
+                'rearrange' => $this->isRearrangeable(),
             ];
     }
 
@@ -251,8 +273,13 @@ class HasMany extends Relation
         $paginate = $paginate
             ->searchFor(trim($request->get('search')))
             ->sortBy(trim($request->get('sort')), $request->has('desc'))
-            ->getQueryWithRelations()
-            ->paginate(20);
+            ->getQueryWithRelations();
+
+        if ($this->isRearrangeable()) {
+            $query->orderBy($this->rearrange);
+        }
+
+        $paginate = $paginate->paginate(20);
 
         $data = [];
 
@@ -277,5 +304,47 @@ class HasMany extends Relation
     private function actionMetric($request, $resource, $model, $metric)
     {
         return $this->getMetric($metric)->handelRequest($request, $resource, $model);
+    }
+
+    private function actionRearrange(Request $request, Resource $resource, Model $model)
+    {
+        $query = call_user_func([$model, $this->getRelation()]);
+        $rResource = $this->getRelationResource();
+        $key = $rResource->getPrimaryKey();
+        $title = is_callable($rResource->title) ? function ($item) use ($rResource) {
+            return call_user_func($rResource->title, $item);
+        } : function ($item) use ($rResource) {
+            return $item->getAttribute($rResource->title);
+        };
+
+        return $query->orderBy($this->rearrange)->get()->map(function ($item) use ($title, $key) {
+            return [
+                'key' => $item->getAttribute($key),
+                'title' => $title($item)
+            ];
+        });
+    }
+
+    private function actionDoRearrange(Request $request, Resource $resource, Model $model)
+    {
+        $query = call_user_func([$model, $this->getRelation()]);
+        $rResource = $this->getRelationResource();
+        $key = $rResource->getPrimaryKey();
+        $rearrange = $this->rearrange;
+
+        $values = $request->validate([
+            'keys' => 'required|array'
+        ]);
+
+        DB::beginTransaction();
+
+        $i = 1;
+        foreach ($values['keys'] as $value) {
+            $query->where($key, $value)->update([$rearrange => $i++]);
+        }
+
+        DB::commit();
+
+        return response()->json(true);
     }
 }

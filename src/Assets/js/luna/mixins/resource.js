@@ -49,6 +49,9 @@ export default {
         },
         searchBar() {
             return this.$store.state.resources[this.resource].search
+        },
+        rearrange() {
+            return this.$store.state.resources[this.resource].rearrange
         }
     }
 }

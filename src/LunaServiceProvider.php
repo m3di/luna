@@ -67,6 +67,8 @@ class LunaServiceProvider extends ServiceProvider
                         $this->app['router']->post('handle', LunaResourceController::class . '@handleAction')->name('handle');
                     });
 
+                    $this->app['router']->get('rearrange', LunaResourceController::class . '@rearrange')->name('rearrange');
+                    $this->app['router']->post('rearrange', LunaResourceController::class . '@doRearrange');
 
                     $this->app['router']->get('paginate', LunaResourceController::class . '@paginate')->name('paginate');
                     $this->app['router']->post('create', LunaResourceController::class . '@create')->name('create');

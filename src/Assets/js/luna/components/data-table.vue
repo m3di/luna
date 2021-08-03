@@ -8,11 +8,19 @@
         </div>
       </div>
 
-      <button @click="$emit('create')"
-              class="btn btn-primary px-3"
-              :disabled="isLoading" v-if="createEnable">
-        <span v-html="createText"></span>
-      </button>
+      <div>
+        <button @click="$emit('rearrange')"
+                class="btn btn-outline-primary px-3"
+                :disabled="isLoading" v-if="rearrange">
+          <span>چیدمان</span>
+        </button>
+
+        <button @click="$emit('create')"
+                class="btn btn-primary px-3"
+                :disabled="isLoading" v-if="createEnable">
+          <span v-html="createText"></span>
+        </button>
+      </div>
     </div>
 
     <div v-if="models">
@@ -185,6 +193,10 @@ export default {
     searchBar: {
       type: Boolean,
       default: true
+    },
+    rearrange: {
+      type: Boolean,
+      default: false,
     }
   },
   data() {

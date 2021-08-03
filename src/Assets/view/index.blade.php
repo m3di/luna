@@ -8,12 +8,9 @@
     <link href="/luna/css/index.css" rel="stylesheet">
     @routes('luna')
     <script defer>
-        window.user = JSON.parse('@json(auth()->user())');
-
-        @if(auth()->check())
-            window.luna = @json(Luna::export());
+        window.user = @json(auth()->user());
+        window.luna = @json(Luna::export());
         window.lang = @json(__('luna'));
-        @endif
 
         window.addEventListener('load', function (e) {
             $('#msbo').on('click', function () {
@@ -27,15 +24,13 @@
 <div id="app" style="display: none">
     <nav class="mnb navbar navbar-dark bg-dark navbar-expand-md fixed-top">
         <div class="container-fluid">
-            <div class="navbar-header">
-                <a href="javascript:void(0)" id="msbo" class="text-muted">
-                    <i class="ic fa fa-bars"></i>
-                </a>
+            <a href="javascript:void(0)" id="msbo" class="text-muted">
+                <i class="ic fa fa-bars"></i>
+            </a>
 
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ ucfirst(config('app.name')) }}
-                </a>
-            </div>
+            <a class="navbar-brand" href="{{ url('/') }}">
+                {{ ucfirst(config('app.name')) }}
+            </a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#app-navbar-collapse"
                     aria-controls="app-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">

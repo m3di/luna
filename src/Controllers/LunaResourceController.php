@@ -2,6 +2,7 @@
 
 namespace Luna\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Luna\Actions\Action;
 use Luna\Metrics\Metric;
 use Luna\Repositories\ResourceModelRepository;
@@ -324,4 +325,55 @@ class LunaResourceController extends BaseController
         return $metric->handelRequest($request, $resource);
     }
 
+    function rearrange(Request $request, $resource)
+    {
+        /** @var Resource $resource */
+        $resource = luna::getResource($resource);
+
+        if (!$resource->isRearrangeable()) {
+            abort(403);
+        }
+
+        $key = $resource->getPrimaryKey();
+        $title = is_callable($resource->title) ? function ($item) use ($resource) {
+            return call_user_func($resource->title, $item);
+        } : function ($item) use ($resource) {
+            return $item->getAttribute($resource->title);
+        };
+
+        return $resource->getQuery()->orderBy($resource->getRearrange())->get()->map(function ($item) use ($title, $key) {
+            return [
+                'key' => $item->getAttribute($key),
+                'title' => $title($item)
+            ];
+        });
+    }
+
+    function doRearrange(Request $request, $resource)
+    {
+        /** @var Resource $resource */
+        $resource = luna::getResource($resource);
+
+        if (!$resource->isRearrangeable()) {
+            abort(403);
+        }
+
+        $values = $request->validate([
+            'keys' => 'required|array'
+        ]);
+
+        $key = $resource->getPrimaryKey();
+        $rearrange = $resource->getRearrange();
+
+        DB::beginTransaction();
+
+        $i = 1;
+        foreach ($values['keys'] as $value) {
+            $resource->getQuery()->where($key, $value)->update([$rearrange => $i++]);
+        }
+
+        DB::commit();
+
+        return response()->json(true);
+    }
 }
