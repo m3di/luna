@@ -20,7 +20,7 @@ class LunaServiceProvider extends ServiceProvider
             __DIR__ . '/Config/config.php' => config_path('luna.php'),
             __DIR__ . '/Luna' => app_path('Luna'),
             __DIR__ . '/Assets/view' => resource_path('views/luna'),
-            __DIR__ . '/Assets/dist' => public_path('luna'),
+            //__DIR__ . '/Assets/dist' => public_path('luna'),
             __DIR__ . '/Assets/lang' => resource_path('lang'),
         ]);
 
