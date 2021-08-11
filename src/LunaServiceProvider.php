@@ -27,14 +27,6 @@ class LunaServiceProvider extends ServiceProvider
         $this->registerRoutes();
     }
 
-    public function internalBoot()
-    {
-        $this->registerResources();
-        $this->registerTools();
-        $this->registerViews();
-        $this->registerMenu();
-    }
-
     public function register()
     {
         $this->app->singleton('luna', function ($app) {
@@ -96,54 +88,5 @@ class LunaServiceProvider extends ServiceProvider
                 });
             });
         }
-    }
-
-    private function registerResources()
-    {
-        $mode = config('luna.resources.mode', 'auto');
-
-        if (!in_array($mode, ['auto', 'manual'])) {
-            throw new \Exception("Luna resource register mode [{$mode}] is not valid.");
-        }
-
-        if ($mode == 'auto') {
-            $path = config('luna.resources.auto', app_path('luna/resources'));
-            $this->app['luna']->setResources(array_keys(ClassMapGenerator::createMap($path)));
-        }
-
-
-        if ($mode == 'manual') {
-            $this->app['luna']->setResources(config('luna.resources.manual', []));
-        }
-    }
-
-    private function registerTools()
-    {
-        // $this->app['luna']->setTools($this->tools());
-    }
-
-    private function registerViews()
-    {
-        $mode = config('luna.views.mode', 'auto');
-
-        if (!in_array($mode, ['auto', 'manual'])) {
-            throw new \Exception("Luna views register mode [{$mode}] is not valid.");
-        }
-
-        if ($mode == 'auto') {
-            $path = config('luna.views.auto', storage_path('luna/views'));
-            $this->app['luna']->setViews(array_keys(ClassMapGenerator::createMap($path)));
-        }
-
-        if ($mode == 'manual') {
-            $this->app['luna']->setViews(config('luna.views.manual', []));
-        }
-    }
-
-    private function registerMenu()
-    {
-        $this->app['luna']->setMenu(config('luna.menu', [
-            \Luna\Menu\AllResources::make('منابغ', 'fa fa-database'),
-        ]));
     }
 }

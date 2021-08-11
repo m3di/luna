@@ -9,6 +9,7 @@ use Luna\Resources\Resource;
 use Luna\Tools\Tool;
 use Illuminate\Foundation\Application;
 use Luna\Views\View;
+use Symfony\Component\ClassLoader\ClassMapGenerator;
 
 class Luna
 {
@@ -223,11 +224,6 @@ class Luna
         ];
     }
 
-    function boot()
-    {
-        $this->bootResources();
-    }
-
     function tap($callable, ...$parameters)
     {
         return is_callable($callable) ? call_user_func_array($callable, $parameters) : $callable;
@@ -247,5 +243,63 @@ class Luna
     function helpTreeUrl($tree)
     {
         return $this->cic(config('luna.ui.external_help_url_generator', null), $tree);
+    }
+
+    function boot()
+    {
+        $this->registerResources();
+        $this->bootResources();
+        $this->registerTools();
+        $this->registerViews();
+        $this->registerMenu();
+    }
+
+    private function registerResources()
+    {
+        $mode = config('luna.resources.mode', 'auto');
+
+        if (!in_array($mode, ['auto', 'manual'])) {
+            throw new \Exception("Luna resource register mode [{$mode}] is not valid.");
+        }
+
+        if ($mode == 'auto') {
+            $path = config('luna.resources.auto', app_path('luna/resources'));
+            $this->setResources(array_keys(ClassMapGenerator::createMap($path)));
+        }
+
+
+        if ($mode == 'manual') {
+            $this->setResources(config('luna.resources.manual', []));
+        }
+    }
+
+    private function registerTools()
+    {
+        // $this->app['luna']->setTools($this->tools());
+    }
+
+    private function registerViews()
+    {
+        $mode = config('luna.views.mode', 'auto');
+
+        if (!in_array($mode, ['auto', 'manual'])) {
+            throw new \Exception("Luna views register mode [{$mode}] is not valid.");
+        }
+
+        if ($mode == 'auto') {
+            $path = config('luna.views.auto', storage_path('luna/views'));
+            $this->setViews(array_keys(ClassMapGenerator::createMap($path)));
+        }
+
+        if ($mode == 'manual') {
+            $this->setViews(config('luna.views.manual', []));
+        }
+    }
+
+    private function registerMenu()
+    {
+        $this->setMenu(config('luna.menu', [
+            \Luna\Menu\AllResources::make('منابغ', 'fa fa-database'),
+        ]));
     }
 }

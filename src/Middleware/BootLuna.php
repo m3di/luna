@@ -9,7 +9,7 @@ class BootLuna
 {
     public function handle($request, Closure $next, ...$guards)
     {
-        app('luna')->internalBoot();
+        app('luna')->boot();
 
         return $next($request);
     }
