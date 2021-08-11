@@ -25,6 +25,10 @@ class LunaServiceProvider extends ServiceProvider
         ]);
 
         $this->registerRoutes();
+    }
+
+    public function internalBoot()
+    {
         $this->registerResources();
         $this->registerTools();
         $this->registerViews();
@@ -62,7 +66,7 @@ class LunaServiceProvider extends ServiceProvider
                     $this->app['router']->any('type/{type}', LunaResourceController::class . '@typeRetrieve')->name('type-retrieve');
                     $this->app['router']->get('metric/{metric}', LunaResourceController::class . '@metric')->name('metric');
 
-                    $this->app['router']->group(['as' => 'action.', 'prefix' => 'action/{action}'], function() {
+                    $this->app['router']->group(['as' => 'action.', 'prefix' => 'action/{action}'], function () {
                         $this->app['router']->get('init', LunaResourceController::class . '@initAction')->name('init');
                         $this->app['router']->post('handle', LunaResourceController::class . '@handleAction')->name('handle');
                     });
