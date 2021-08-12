@@ -23,7 +23,7 @@
     </script>
     <script src="/luna/js/index.js" defer></script>
 </head>
-<body class="rtl">
+<body class="rtl show-sidebar-lg">
 <div id="app" style="display: none">
     <nav class="main-navbar navbar navbar-dark bg-dark navbar-expand-md fixed-top">
         <div class="container-fluid justify-content-start">
