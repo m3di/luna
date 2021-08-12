@@ -14,15 +14,18 @@
 
         window.addEventListener('load', function (e) {
             $('#msbo').on('click', function () {
-                $('body').toggleClass('msb-x');
+                $('body').toggleClass('show-sidebar-xs').toggleClass('show-sidebar-lg')
+            });
+            $('.main-content-wrapper').on('click', function () {
+                $('body').removeClass('show-sidebar-xs');
             });
         })
     </script>
     <script src="/luna/js/index.js" defer></script>
 </head>
-<body class="rtl msb-x">
+<body class="rtl">
 <div id="app" style="display: none">
-    <nav class="mnb navbar navbar-dark bg-dark navbar-expand-md fixed-top">
+    <nav class="main-navbar navbar navbar-dark bg-dark navbar-expand-md fixed-top">
         <div class="container-fluid justify-content-start">
             <a href="javascript:void(0)" id="msbo" class="text-muted">
                 <i class="ic fa fa-bars"></i>
@@ -42,12 +45,11 @@
         </div>
     </nav>
 
-    <nav class="msb">
+    <nav class="main-sidebar">
         <div class="user d-flex align-items-start">
             <div class="avatar">
-                <img
-                        src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim(auth()->user()->email))) }}?s=40"
-                        alt="">
+                <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim(auth()->user()->email))) }}?s=40"
+                     alt="">
             </div>
             <div>
                 <div class="username">{{ auth()->user()->name }}</div>
@@ -58,10 +60,8 @@
         <luna-menu></luna-menu>
     </nav>
 
-    <div role="main" class="mcw px-4 mb-md-5">
-        <div class="cv">
-            <router-view :key="$route.path"></router-view>
-        </div>
+    <div role="main" class="main-content-wrapper px-4">
+        <router-view :key="$route.path"></router-view>
     </div>
 </div>
 </body>
