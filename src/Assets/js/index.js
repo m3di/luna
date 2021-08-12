@@ -13,8 +13,8 @@ window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 window.onCsrfToken = function (token) {
+    window.csrf = token;
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token;
-
     $.ajaxSetup({
         headers: {'X-CSRF-TOKEN': token}
     });

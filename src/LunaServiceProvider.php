@@ -37,7 +37,12 @@ class LunaServiceProvider extends ServiceProvider
     private function registerRoutes()
     {
         config(['ziggy.groups' => [
-            'luna' => ['luna.*'],
+            'luna' => [
+                'luna.*',
+                'login',
+                'register',
+                'logout'
+            ],
         ]]);
 
         if (!$this->app->routesAreCached()) {

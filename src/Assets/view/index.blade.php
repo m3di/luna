@@ -20,10 +20,10 @@
     </script>
     <script src="/luna/js/index.js" defer></script>
 </head>
-<body class="rtl">
+<body class="rtl msb-x">
 <div id="app" style="display: none">
     <nav class="mnb navbar navbar-dark bg-dark navbar-expand-md fixed-top">
-        <div class="container-fluid">
+        <div class="container-fluid justify-content-start">
             <a href="javascript:void(0)" id="msbo" class="text-muted">
                 <i class="ic fa fa-bars"></i>
             </a>
@@ -31,27 +31,6 @@
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ ucfirst(config('app.name')) }}
             </a>
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#app-navbar-collapse"
-                    aria-controls="app-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item mr-0">
-                        <a class="nav-link" href="{{ route('logout') }}"
-                           onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                            <span>خروج</span>
-                        </a>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                              style="display: none;">
-                            @csrf
-                        </form>
-                    </li>
-                </ul>
-            </div>
         </div>
 
         <div id="app-loading" v-if="isLoading">

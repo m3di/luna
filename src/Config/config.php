@@ -22,21 +22,21 @@ return [
     'resources' => [
         'mode' => 'auto', // or manual
 
-        'auto' => app_path('luna/resources'),
+        'auto' => app_path('Luna/Resources'),
         'manual' => [],
     ],
 
     'tools' => [
         'mode' => 'auto', // or manual
 
-        'auto' => app_path('luna/tools'),
+        'auto' => app_path('Luna/Tools'),
         'manual' => [],
     ],
 
     'views' => [
         'mode' => 'auto', // or manual
 
-        'auto' => app_path('luna/views'),
+        'auto' => app_path('Luna/Views'),
         'manual' => [],
     ],
 
