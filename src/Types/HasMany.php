@@ -340,7 +340,7 @@ class HasMany extends Relation
 
         $i = 1;
         foreach ($values['keys'] as $value) {
-            $query->where($key, $value)->update([$rearrange => $i++]);
+            (clone $query)->where($key, $value)->update([$rearrange => $i++]);
         }
 
         DB::commit();
