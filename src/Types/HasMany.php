@@ -327,8 +327,8 @@ class HasMany extends Relation
 
     private function actionDoRearrange(Request $request, Resource $resource, Model $model)
     {
-        $query = call_user_func([$model, $this->getRelation()]);
         $rResource = $this->getRelationResource();
+        $query = $rResource->getQuery();
         $key = $rResource->getPrimaryKey();
         $rearrange = $this->rearrange;
 
