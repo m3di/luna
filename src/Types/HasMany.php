@@ -246,6 +246,19 @@ class HasMany extends Relation
             ];
     }
 
+    function getRelatedQuery(Model $model)
+    {
+        $query = call_user_func([$model, $this->getRelation()]);
+
+        if ($this->query) {
+            if ($result = call_user_func_array($this->query, [$query, $model])) {
+                $query = $result;
+            }
+        }
+
+        return $query;
+    }
+
     private function actionIndex(Request $request, Resource $resource, Model $model)
     {
         $relation = $this->getRelationResource();
@@ -254,13 +267,7 @@ class HasMany extends Relation
             return $field->isVisibleOnIndex() || $field->getName() == $relation->getPrimaryKey();
         });
 
-        $query = call_user_func([$model, $this->getRelation()]);
-
-        if ($this->query) {
-            if ($result = call_user_func_array($this->query, [$query, $model])) {
-                $query = $result;
-            }
-        }
+        $query = $this->getRelatedQuery($model);
 
         $paginate = ResourceModelRepository::make($relation, $query)
             ->fields($fields)
@@ -309,7 +316,7 @@ class HasMany extends Relation
     private function actionRearrange(Request $request, Resource $resource, Model $model)
     {
         $rResource = $this->getRelationResource();
-        $query = $rResource->getQuery();
+        $query = $this->getRelatedQuery($model);
         $key = $rResource->getPrimaryKey();
         $title = is_callable($rResource->title) ? function ($item) use ($rResource) {
             return call_user_func($rResource->title, $item);
@@ -328,7 +335,7 @@ class HasMany extends Relation
     private function actionDoRearrange(Request $request, Resource $resource, Model $model)
     {
         $rResource = $this->getRelationResource();
-        $query = $rResource->getQuery();
+        $query = $this->getRelatedQuery($model);
         $key = $rResource->getPrimaryKey();
         $rearrange = $this->rearrange;
 
