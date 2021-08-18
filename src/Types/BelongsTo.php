@@ -111,7 +111,7 @@ class BelongsTo extends Relation
         }
     }
 
-    public function handelRetrieveRequest(Request $request, Resource $resource, ?Model $model)
+    public function handleRetrieveRequest(Request $request, Resource $resource, ?Model $model)
     {
         /** @var Resource $relationResource */
         $relationResource = $this->getRelationResource();

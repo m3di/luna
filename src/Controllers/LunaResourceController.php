@@ -38,6 +38,8 @@ class LunaResourceController extends BaseController
 
     function paginate(Request $request, $resource)
     {
+        $user = $request->user();
+
         /** @var Resource $resource */
         $resource = luna::getResource($resource);
         $fields = $resource->visibleFieldsOnIndex();
@@ -70,6 +72,12 @@ class LunaResourceController extends BaseController
                 $row[$field->getName()] = $field->displayFor($item);
             }
 
+            $row['__perms'] = [
+                'view' => $resource->view($item, $user),
+                'edit' => $resource->edit($item, $user),
+                'delete' => $resource->delete($item, $user),
+            ];
+
             $data[] = $row;
         }
 
@@ -83,6 +91,8 @@ class LunaResourceController extends BaseController
 
     function typeRetrieve(Request $request, $resource, $type)
     {
+        $user = $request->user();
+
         /** @var Resource $resource */
         $resource = luna::getResource($resource);
 
@@ -95,15 +105,21 @@ class LunaResourceController extends BaseController
             $model = $resource->getQuery()->findOrFail($model);
 
             if (\Gate::getPolicyFor($resource->model)) {
-                $this->authorize('update', $model);
+                $this->authorize('view', $model);
+            }
+
+            if (!$resource->view($model, $user)) {
+                abort(403);
             }
         }
 
-        return $type->handelRetrieveRequest($request, $resource, $model);
+        return $type->handleRetrieveRequest($request, $resource, $model);
     }
 
-    function details($resource, $model)
+    function details(Request $request, $resource, $model)
     {
+        $user = $request->user();
+
         /** @var Resource $resource */
         $resource = luna::getResource($resource);
 
@@ -120,6 +136,10 @@ class LunaResourceController extends BaseController
 
         if (\Gate::getPolicyFor($resource->model)) {
             $this->authorize('view', $model);
+        }
+
+        if (!$resource->view($model, $user)) {
+            abort(403);
         }
 
         $data = [];
@@ -170,8 +190,10 @@ class LunaResourceController extends BaseController
         return response()->json(true);
     }
 
-    function edit($resource, $model)
+    function edit(Request $request, $resource, $model)
     {
+        $user = $request->user();
+
         /** @var Resource $resource */
         $resource = luna::getResource($resource);
 
@@ -190,6 +212,10 @@ class LunaResourceController extends BaseController
             $this->authorize('update', $model);
         }
 
+        if (!$resource->edit($model, $user)) {
+            abort(403);
+        }
+
         $data = [];
 
         foreach ($fields as $field) {
@@ -201,6 +227,8 @@ class LunaResourceController extends BaseController
 
     function update(Request $request, $resource, $model)
     {
+        $user = $request->user();
+
         /** @var Resource $resource */
         $resource = luna::getResource($resource);
 
@@ -212,6 +240,10 @@ class LunaResourceController extends BaseController
 
         if (\Gate::getPolicyFor($resource->model)) {
             $this->authorize('update', $model);
+        }
+
+        if (!$resource->edit($model, $user)) {
+            abort(403);
         }
 
         $this->validate($request, $resource->getUpdateRules($model), $resource->getRulesMessages(), $resource->getRulesAttributes());
@@ -241,6 +273,8 @@ class LunaResourceController extends BaseController
 
     function destroy(Request $request, $resource, $model)
     {
+        $user = $request->user();
+
         /** @var Resource $resource */
         $resource = luna::getResource($resource);
 
@@ -254,6 +288,10 @@ class LunaResourceController extends BaseController
             $this->authorize('delete', $model);
         }
 
+        if (!$resource->delete($model, $user)) {
+            abort(403);
+        }
+
         $resource->fireDeleting($request, $model);
         $result = $model->delete();
         $resource->fireDeleted($request, $model);
@@ -263,19 +301,25 @@ class LunaResourceController extends BaseController
 
     function typeAction(Request $request, $resource, $model, $type)
     {
+        $user = $request->user();
+
         /** @var Resource $resource */
         $resource = luna::getResource($resource);
 
         $model = $resource->getQuery()->findOrFail($model);
 
         if (\Gate::getPolicyFor($resource->model)) {
-            //$this->authorize('update', $model);
+            $this->authorize('update', $model);
+        }
+
+        if (!$resource->edit($model, $user)) {
+            abort(403);
         }
 
         /** @var Type $type */
         $type = $resource->getField($type);
 
-        return $type->handelActionRequest($request, $resource, $model);
+        return $type->handleActionRequest($request, $resource, $model);
     }
 
     function initAction(Request $request, $resource, $action)

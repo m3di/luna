@@ -19,12 +19,8 @@ class LiveTextarea extends Type
         return (new static($name))->columnName(is_null($column_name) ? $name : $column_name);
     }
 
-    function handelActionRequest(Request $request, Resource $resource, Model $model)
+    function handleActionRequest(Request $request, Resource $resource, Model $model)
     {
-        if (\Gate::getPolicyFor($model)) {
-            \Gate::authorize('update', $model);
-        }
-
         if (\Validator::make($request->only($this->getName()), $this->getUpdateRules($model))->passes()) {
             $this->fillFromRequest($request, $model, function () {
 

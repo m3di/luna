@@ -58,8 +58,9 @@ export default {
       return this.field.primaryKey
     },
     fetchUrl() {
-      return route('luna.resources.type-action', [this.resource, this.values[this.primaryKey], this.field.name]).withQuery({
-        action: 'index'
+      return route('luna.resources.type-retrieve', [this.resource, this.field.name]).withQuery({
+        action: 'index',
+        model: this.values[this.primaryKey],
       })
     },
     visibleFields() {
@@ -79,8 +80,9 @@ export default {
       'si',
     ]),
     metricUrlGenerator(index) {
-      return this.route('luna.resources.type-action', [this.resource, this.values[this.primaryKey], this.field.name]).withQuery({
+      return this.route('luna.resources.type-action', [this.resource, this.field.name]).withQuery({
         action: 'metric',
+        model: this.values[this.primaryKey],
         metric: index,
       });
     },

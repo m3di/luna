@@ -318,12 +318,12 @@ abstract class Type
 
     }
 
-    public function handelRetrieveRequest(Request $request, Resource $resource, ?Model $model)
+    public function handleRetrieveRequest(Request $request, Resource $resource, ?Model $model)
     {
 
     }
 
-    public function handelActionRequest(Request $request, Resource $resource, Model $model)
+    public function handleActionRequest(Request $request, Resource $resource, Model $model)
     {
 
     }

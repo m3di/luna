@@ -177,16 +177,21 @@ class HasMany extends Relation
 
     }
 
-    public function handelActionRequest(Request $request, Resource $resource, Model $model)
+    public function handleRetrieveRequest(Request $request, Resource $resource, ?Model $model)
     {
-        if ($request->method() == 'GET' && $request->get('action') == 'index') {
+        if ($request->get('action') == 'index') {
             return $this->actionIndex($request, $resource, $model);
         }
 
-        if ($request->method() == 'GET' && $request->get('action') == 'metric') {
+        if ($request->get('action') == 'metric') {
             return $this->actionMetric($request, $resource, $model, $request->get('metric'));
         }
 
+        return null;
+    }
+
+    public function handleActionRequest(Request $request, Resource $resource, Model $model)
+    {
         if ($this->isRearrangeable() && $request->method() == 'GET' && $request->get('action') == 'rearrange') {
             return $this->actionRearrange($request, $resource, $model);
         }
@@ -261,6 +266,7 @@ class HasMany extends Relation
 
     private function actionIndex(Request $request, Resource $resource, Model $model)
     {
+        $user = $request->user();
         $relation = $this->getRelationResource();
 
         $fields = array_filter($this->fields, function (Type $field) use ($relation) {
@@ -296,6 +302,12 @@ class HasMany extends Relation
             foreach ($fields as $field) {
                 $row[$field->getName()] = $field->displayFor($item);
             }
+
+            $row['__perms'] = [
+                'view' => $relation->view($item, $user),
+                'edit' => $relation->edit($item, $user),
+                'delete' => $relation->delete($item, $user),
+            ];
 
             $data[] = $row;
         }

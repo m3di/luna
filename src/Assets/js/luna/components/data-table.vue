@@ -80,15 +80,15 @@
               <td class="pt-2 pb-0">
                 <div class="d-flex justify-content-end flex-nowrap text-lg">
                   <a href="javascript:void(0)" class="text-dark" @click="details(item)"
-                     v-if="detailsEnable">
+                     v-if="detailsEnable && (!item.hasOwnProperty('__perms') || item.__perms.view)">
                     <i class="fa fa-eye"></i>
                   </a>
                   <a href="javascript:void(0)" class="text-dark ml-3" @click="edit(item)"
-                     v-if="editEnable">
+                     v-if="editEnable && (!item.hasOwnProperty('__perms') || item.__perms.edit)">
                     <i class="fa fa-edit"></i>
                   </a>
                   <a href="javascript:void(0)" class="text-dark ml-3" @click="remove(item)"
-                     v-if="removeEnable">
+                     v-if="removeEnable && (!item.hasOwnProperty('__perms') || item.__perms.delete)">
                     <i class="fa fa-trash"></i>
                   </a>
                 </div>

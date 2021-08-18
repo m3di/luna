@@ -2,6 +2,7 @@
 
 namespace Luna\Resources;
 
+use Illuminate\Database\Eloquent\Model;
 use Luna\Panels\PanelSimple;
 use Luna\Types\Type;
 use Luna;
@@ -276,11 +277,6 @@ abstract class Resource
         return call_user_func([$this->model, 'query']);
     }
 
-    function authorize($user)
-    {
-        return true;
-    }
-
     function getCreationRules()
     {
         return array_reduce($this->visibleFieldsOnCreate(), function ($carry, Type $item) {
@@ -388,5 +384,27 @@ abstract class Resource
     public function getExtraColumns()
     {
         return $this->extraColumns;
+    }
+
+    /** Authorization functions */
+
+    function authorize($user): bool
+    {
+        return true;
+    }
+
+    function view(Model $model, $user): bool
+    {
+        return true;
+    }
+
+    function edit(Model $model, $user): bool
+    {
+        return true;
+    }
+
+    function delete(Model $model, $user): bool
+    {
+        return true;
     }
 }

@@ -85,7 +85,8 @@ class BelongsToMany extends Relation
         return $this;
     }
 
-    function noSearch() {
+    function noSearch()
+    {
         $this->search = false;
         return $this;
     }
@@ -185,30 +186,34 @@ class BelongsToMany extends Relation
     {
     }
 
-    public function handelRetrieveRequest(Request $request, Resource $resource, ?Model $model)
+    public function handleRetrieveRequest(Request $request, Resource $resource, ?Model $model)
     {
+        if ($request->get('action') == 'index') {
+            return $this->actionIndex($request, $resource, $model);
+        }
+
+        if ($request->get('action') == 'metric') {
+            return $this->actionMetric($request, $resource, $model, $request->get('metric'));
+        }
+
         switch ($request->get('field')) {
             case'_':
-                {
-                    if ($request->has('lookup')) {
-                        return $this->displayCandidate(call_user_func([$model, $this->relation])->findOrFail($request->get('lookup')));
-                    }
-                    return $this->retrieveCandidates($request, $resource, $model);
+            {
+                if ($request->has('lookup')) {
+                    return $this->displayCandidate(call_user_func([$model, $this->relation])->findOrFail($request->get('lookup')));
                 }
+                return $this->retrieveCandidates($request, $resource, $model);
+            }
             default:
-                {
-                    return $this->fields[$request->get('field')]->handelRetrieveRequest($request, $resource, $model);
-                }
+            {
+                return $this->fields[$request->get('field')]->handleRetrieveRequest($request, $resource, $model);
+            }
         }
     }
 
 
-    public function handelActionRequest(Request $request, Resource $resource, Model $model)
+    public function handleActionRequest(Request $request, Resource $resource, Model $model)
     {
-        if ($request->method() == 'GET' && $request->get('action') == 'index') {
-            return $this->actionIndex($request, $resource, $model);
-        }
-
         if (!$this->disableAttachPanel && $request->method() == 'POST' && $request->get('action') == 'attach') {
             return $this->actionAttach($request, $resource, $model);
         }
@@ -223,10 +228,6 @@ class BelongsToMany extends Relation
 
         if (!$this->disableDetachOption && $request->method() == 'POST' && $request->get('action') == 'detach') {
             return $this->actionDetach($request, $resource, $model);
-        }
-
-        if ($request->method() == 'GET' && $request->get('action') == 'metric') {
-            return $this->actionMetric($request, $resource, $model, $request->get('metric'));
         }
 
         return null;
