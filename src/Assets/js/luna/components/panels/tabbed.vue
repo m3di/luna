@@ -4,7 +4,7 @@
       <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" v-for="(field, index) in visibleFields">
                 <a class="nav-link" :class="{'active':activeTab==index}" href="javascript:void(0)"
-                   @click="changeTab(index)" v-text="field.title"></a>
+                   @click="changeTab(index)" v-text="field.title" :title="field.title"></a>
             </li>
         </ul>
         <component :is="'luna-type-' + visibleFields[activeTab].type"
