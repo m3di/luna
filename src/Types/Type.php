@@ -16,6 +16,7 @@ abstract class Type
 
     protected $name;
     protected $title;
+    protected $tooltip;
     protected $type;
     protected $help = false;
     protected $default = null;
@@ -76,6 +77,11 @@ abstract class Type
         return $this->title ?? $this->name;
     }
 
+    function getTooltip()
+    {
+        return $this->tooltip;
+    }
+
     function getColumnName()
     {
         return $this->columnName;
@@ -84,6 +90,12 @@ abstract class Type
     function title($title)
     {
         $this->title = $title;
+        return $this;
+    }
+
+    function tooltip($tooltip)
+    {
+        $this->tooltip = $tooltip;
         return $this;
     }
 
@@ -333,6 +345,7 @@ abstract class Type
         return [
             'name' => $this->getName(),
             'title' => $this->getTitle(),
+            'tooltip' => $this->getTooltip(),
             'help' => $this->help,
             'default' => $this->default,
             'type' => $this->type,
